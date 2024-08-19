@@ -6,10 +6,10 @@ const manifestForPlugin = {
   registerType: "autoUpdate",
   includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
   manifest: {
-    name: "My Awesome App",
-    short_name: "MyApp",
-    description: "My Awesome App description",
-    theme_color: "#ffffff",
+    name: "MBANK",
+    short_name: "MBANK",
+    description: "MBANK",
+    theme_color: "#000",
     icons: [
       {
         src: "/pwa-192x192.png",
@@ -23,18 +23,18 @@ const manifestForPlugin = {
         type: "image/png",
         purpose: "any",
       },
-      {
-        src: "/pwa-maskable-192x192.png",
-        sizes: "192x192",
-        type: "image/png",
-        purpose: "maskable",
-      },
-      {
-        src: "/pwa-maskable-512x512.png",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "maskable",
-      },
+      // {
+      //   src: "/pwa-maskable-192x192.png",
+      //   sizes: "192x192",
+      //   type: "image/png",
+      //   purpose: "maskable",
+      // },
+      // {
+      //   src: "/pwa-maskable-512x512.png",
+      //   sizes: "512x512",
+      //   type: "image/png",
+      //   purpose: "maskable",
+      // },
     ],
   },
 };
