@@ -7,13 +7,13 @@ function App() {
   const pass = "999";
   const { pathname } = useLocation();
 
-  // useEffect(() => {
-  //   let curr: string = "";
+  useEffect(() => {
+    let curr: string = "";
 
-  //   while (curr !== pass) {
-  //     curr = prompt("say my name") || "";
-  //   }
-  // }, []);
+    while (curr !== pass) {
+      curr = prompt("say my name") || "";
+    }
+  }, []);
 
   return (
     <div className="App">
