@@ -32,3 +32,5 @@ export const payments: IPaymentDateType[] = [
     ],
   },
 ];
+
+export const contacts = [{ name: "Дунду" }, { name: "Жума" }];

@@ -1,20 +1,28 @@
 import { useEffect } from "react";
-import MainPage from "./pages/mainPage/MainPage";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { pagesWithNavigation, routes } from "./constants/routes";
+import Navigation from "./components/navigation/Navigation";
 
 function App() {
   const pass = "999";
+  const { pathname } = useLocation();
 
-  useEffect(() => {
-    let curr: string = "";
+  // useEffect(() => {
+  //   let curr: string = "";
 
-    while (curr !== pass) {
-      curr = prompt("say my name") || "";
-    }
-  }, []);
+  //   while (curr !== pass) {
+  //     curr = prompt("say my name") || "";
+  //   }
+  // }, []);
 
   return (
-    <div className="min-h-[105vh]">
-      <MainPage />
+    <div className="App">
+      <Routes>
+        {routes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+      {pagesWithNavigation.includes(pathname.slice(0)) && <Navigation />}
     </div>
   );
 }

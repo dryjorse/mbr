@@ -9,12 +9,30 @@
   body {
     @apply bg-black font-nunito text-white;
   }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar {
+    @apply w-[0px] h-[0px];
+  }
+  h1 {
+    @apply text-[28px];
+  }
   h1,
   h2,
   h3 {
     @apply font-bold;
   }
+  input {
+    @apply rounded-[10px] py-[6px] bg-light-gray;
+  }
+  input::placeholder {
+    @apply text-grey
+  }
   .trans-def {
     transition: 0.1s ease-in all;
+  }
+  .App {
+    @apply p-[7px];
   }
 }

@@ -7,7 +7,10 @@ const colors = {
   gray: "#1c1c1e",
   green: "#04994e",
   grey: "#939498",
+  "light-gray": "#161616",
   "border-gray": "#333335",
+  transparent: twColors.transparent,
+  red: "#E34C4A",
 };
 
 export default {
