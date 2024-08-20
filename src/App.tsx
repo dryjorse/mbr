@@ -22,7 +22,7 @@ function App() {
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Routes>
-      {pagesWithNavigation.includes(pathname.slice(0)) && <Navigation />}
+      {pagesWithNavigation.includes(pathname.slice(1)) && <Navigation />}
     </div>
   );
 }

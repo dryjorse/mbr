@@ -11,6 +11,7 @@ const colors = {
   "border-gray": "#333335",
   transparent: twColors.transparent,
   red: "#E34C4A",
+  yellow: "#FABF01",
 };
 
 export default {
