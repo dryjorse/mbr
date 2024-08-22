@@ -13,12 +13,12 @@ import { IPaymentDateType, IType } from "../../types/types";
 interface Props {
   isOpen: boolean;
   close: () => void;
-  summState: [number, Dispatch<SetStateAction<number>>];
-  nameState: [string, Dispatch<SetStateAction<string>>];
-  phoneState: [number, Dispatch<SetStateAction<number>>];
-  setData: Dispatch<SetStateAction<IPaymentDateType[]>>;
+  summState: [number, Dispatch<SetStateAction<number>>?];
+  nameState: [string, Dispatch<SetStateAction<string>>?];
+  phoneState: [number, Dispatch<SetStateAction<number>>?];
+  setData?: Dispatch<SetStateAction<IPaymentDateType[]>>;
   type?: IType;
-  transportCodeState?: [number, Dispatch<SetStateAction<number>>];
+  transportCodeState?: [number, Dispatch<SetStateAction<number>>?];
 }
 
 const Uumark: FC<Props> = ({
@@ -80,12 +80,12 @@ const Uumark: FC<Props> = ({
         }
       }
 
-      setSumm(newSumm);
-      setName(newName);
-      setPhone(newPhone);
+      setSumm?.(newSumm);
+      setName?.(newName);
+      setPhone?.(newPhone);
       setTransportCode?.(newTransportCode);
 
-      setData((data) => [
+      setData?.((data) => [
         {
           date: "Сегодня",
           payments: [
@@ -145,9 +145,7 @@ const Uumark: FC<Props> = ({
         <div className="my-[7px] flex justify-between items-center text-[15px]">
           <span className="text-grey">Имя получателя</span>
           <span className="text-end flex-[0_1_200px]">
-            {type === "tulpar"
-              ? "CASH OUT ТУЛПАР ОПЛАТА ЗА ПРОЕЗД"
-              : `${name}.`}
+            {type === "tulpar" ? "CASH OUT ТУЛПАР ОПЛАТА ЗА ПРОЕЗД" : name}
           </span>
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">

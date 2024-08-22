@@ -33,4 +33,7 @@ export const payments: IPaymentDateType[] = [
   },
 ];
 
-export const contacts = [{ name: "Дунду" }, { name: "Жума" }];
+export const contacts = [
+  { name: "Дунду", tel: 228903050, fullname: "Абдуннур А." },
+  { name: "Жума", tel: 706309316, fullname: "Эржан Ж." },
+];

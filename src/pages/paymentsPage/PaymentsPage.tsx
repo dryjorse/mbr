@@ -2,6 +2,7 @@ import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { contacts } from "../../constants/data";
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
+import { randomInteger } from "../../constants/utils";
 import searchIcon from "../../assets/images/icons/search.svg";
 import phoneIcon from "../../assets/images/icons/phone.svg";
 import worldIcon from "../../assets/images/icons/world.svg";
@@ -18,6 +19,9 @@ import otherBanksIcon from "../../assets/images/icons/other-banks.svg";
 import qrIcon from "../../assets/images/icons/qr.svg";
 import russiaIcon from "../../assets/images/icons/russia.svg";
 import moneyQueriesIcon from "../../assets/images/icons/money-queries.svg";
+import markIcon from "../../assets/images/icons/mark-small.svg";
+import { useAppDispatch } from "../../store/store";
+import { setName, setPhone } from "../../store/slices/transferSlice";
 
 const transtactionTypes = [
   { icon: worldIcon, title: "В другую страну", isNew: true },
@@ -55,7 +59,23 @@ const billFullTypes = [
   },
 ];
 
+const paymentsPlaceholders = [
+  "Штрафы",
+  "Газ",
+  "Свет",
+  "Мобильная связь",
+  "ТВ",
+  "Вода",
+  "Вывоз мусора",
+  "Домофон",
+  "МКК",
+  "Интернет",
+  "Образование",
+  "Лифт",
+];
+
 const PaymentsPage: FC = () => {
+  const dispatch = useAppDispatch();
   const controls = useAnimation();
   const { scrollY } = useViewportScroll();
 
@@ -96,12 +116,16 @@ const PaymentsPage: FC = () => {
         <input
           type="text"
           className="mx-auto pl-[45px] block w-[calc(100%-6px)]"
-          placeholder="Газ"
+          placeholder={
+            paymentsPlaceholders[
+              randomInteger(0, paymentsPlaceholders.length - 1)
+            ]
+          }
         />
       </div>
       <h2 className="text-[24px]">Переводы по телефону</h2>
       <div className="mt-10 flex items-start gap-[30px] text-center text-[14px] leading-[18px]">
-        <Link to="/payment-by-phone">
+        <Link to="/transfer-by-phone">
           <img
             src={phoneIcon}
             alt="phone"
@@ -113,9 +137,21 @@ const PaymentsPage: FC = () => {
           </span>
         </Link>
         {contacts.map((contact) => (
-          <Link key={contact.name} to="/payment-by-phone2">
-            <div className="mb-[5px] border border-[#2C2C2E] rounded-circle w-[49px] h-[49px] flex justify-center items-center bg-gray text-center text-grey text-[16px] font-medium">
+          <Link
+            onClick={() => {
+              dispatch(setName(contact.fullname));
+              dispatch(setPhone(contact.tel));
+            }}
+            key={contact.name}
+            to="/transfer-by-phone2"
+          >
+            <div className="relative mb-[5px] border border-[#2C2C2E] rounded-circle w-[49px] h-[49px] flex justify-center items-center bg-gray text-center text-grey text-[16px] font-medium">
               {contact.name.slice(0, 1)}
+              <img
+                src={markIcon}
+                alt="mark"
+                className="rounded-circle absolute right-[-3px] bottom-[-2px] w-[20px]"
+              />
             </div>
             <span>{contact.name}</span>
           </Link>

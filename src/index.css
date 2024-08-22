@@ -24,15 +24,22 @@
     @apply font-bold;
   }
   input {
-    @apply rounded-[10px] py-[6px] bg-light-gray;
+    @apply rounded-[10px] py-[6px] bg-light-gray outline-none caret-green;
   }
+
   input::placeholder {
-    @apply text-grey
+    @apply text-grey;
   }
   .trans-def {
     transition: 0.1s ease-in all;
   }
   .App {
     @apply p-[7px];
+  }
+  .som {
+    @apply underline font-bold;
+  }
+  .btn {
+    @apply rounded-[18px] py-[15px] bg-[#FEDD2C] w-full flex gap-[5px] justify-center text-black font-bold text-center;
   }
 }
