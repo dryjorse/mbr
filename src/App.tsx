@@ -9,13 +9,13 @@ function App() {
   const { pathname } = useLocation();
   const isWithNavigation = pagesWithNavigation.includes(pathname.slice(1));
 
-  // useEffect(() => {
-  //   let curr: string = "";
+  useEffect(() => {
+    let curr: string = "";
 
-  //   while (curr !== pass) {
-  //     curr = prompt("say my name") || "";
-  //   }
-  // }, []);
+    while (curr !== pass) {
+      curr = prompt("say my name") || "";
+    }
+  }, []);
 
   return (
     <div className={clsx("App", { "pb-[78px]": isWithNavigation })}>
