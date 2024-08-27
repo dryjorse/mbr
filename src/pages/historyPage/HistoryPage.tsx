@@ -1,13 +1,14 @@
 import { FC, Fragment, useState } from "react";
 import Uumark from "../../components/uumark/Uumark";
 import clsx from "clsx";
-import { payments } from "../../constants/data";
-import { IPaymentDateType, IPaymentType, IType } from "../../types/types";
+import { IPaymentType, IType } from "../../types/types";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import arrowWhiteIcon from "../../assets/images/icons/arrow-white.svg";
 import incomeIcon from "../../assets/images/icons/income.svg";
 import tulparIcon from "../../assets/images/icons/tulpar.svg";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const HistoryPage: FC = () => {
   const [summ, setSumm] = useState(1000);
@@ -16,7 +17,7 @@ const HistoryPage: FC = () => {
   const [transportCode, setTransportCode] = useState(1517);
   const [type, setType] = useState<IType>("");
   const [isUumarkOpen, setIsUumarkOpen] = useState(false);
-  const [data, setData] = useState<IPaymentDateType[]>(payments);
+  const { payments } = useSelector((state: RootState) => state.transfer);
   const navigate = useNavigate();
 
   const onClickPayment = (data: IPaymentType) => {
@@ -46,7 +47,7 @@ const HistoryPage: FC = () => {
           <span>Выбрать период</span>
           <img src={arrowWhiteIcon} alt="arrow-white" className="w-[10px]" />
         </button>
-        {data.map((payment, key) => (
+        {payments.map((payment, key) => (
           <div key={key}>
             <h2 className="mt-[15px] mb-[5px] pl-[10px] text-grey font-normal">
               {payment.date}
@@ -101,7 +102,6 @@ const HistoryPage: FC = () => {
         phoneState={[phone, setPhone]}
         transportCodeState={[transportCode, setTransportCode]}
         type={type}
-        setData={setData}
       />
     </>
   );

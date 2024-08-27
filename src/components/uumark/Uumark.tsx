@@ -8,7 +8,10 @@ import taskIcon from "../../assets/images/icons/task.svg";
 import repeatIcon from "../../assets/images/icons/repeat.svg";
 import favouriteIcon from "../../assets/images/icons/favourite.svg";
 import clsx from "clsx";
-import { IPaymentDateType, IType } from "../../types/types";
+import { IType } from "../../types/types";
+import { RootState, useAppDispatch } from "../../store/store";
+import { setPayments } from "../../store/slices/transferSlice";
+import { useSelector } from "react-redux";
 
 interface Props {
   isOpen: boolean;
@@ -16,7 +19,6 @@ interface Props {
   summState: [number, Dispatch<SetStateAction<number>>?];
   nameState: [string, Dispatch<SetStateAction<string>>?];
   phoneState: [number, Dispatch<SetStateAction<number>>?];
-  setData?: Dispatch<SetStateAction<IPaymentDateType[]>>;
   type?: IType;
   transportCodeState?: [number, Dispatch<SetStateAction<number>>?];
 }
@@ -27,15 +29,16 @@ const Uumark: FC<Props> = ({
   summState,
   nameState,
   phoneState,
-  setData,
   type,
   transportCodeState,
 }) => {
+  const dispatch = useAppDispatch();
   const [summ, setSumm] = summState;
   const [name, setName] = nameState;
   const [phone, setPhone] = phoneState;
   const [transportCode, setTransportCode] = transportCodeState || [];
   const [clicks, setClicks] = useState(0);
+  const { payments } = useSelector((state: RootState) => state.transfer);
 
   const date = new Date();
   const currentDate = `${formatNumber(date.getDate())}.${formatNumber(
@@ -62,22 +65,22 @@ const Uumark: FC<Props> = ({
       let newName: string = "";
       let newPhone: number = 0;
       let newTransportCode: number = 0;
-      while (!newSumm) {
-        newSumm = +(prompt("Введите сумму") || 0);
-      }
 
       if (type === "tulpar") {
         while (!newTransportCode) {
           newTransportCode = +(prompt("Введите код транспорта") || 0);
         }
       } else {
-        while (!newName) {
-          newName = prompt("Введите имя") || "";
-        }
-
         while (!newPhone) {
           newPhone = +(prompt("Введите номер телефона") || 0);
         }
+        while (!newName) {
+          newName = prompt("Введите имя") || "";
+        }
+      }
+
+      while (!newSumm) {
+        newSumm = +(prompt("Введите сумму") || 0);
       }
 
       setSumm?.(newSumm);
@@ -85,22 +88,25 @@ const Uumark: FC<Props> = ({
       setPhone?.(newPhone);
       setTransportCode?.(newTransportCode);
 
-      setData?.((data) => [
-        {
-          date: "Сегодня",
-          payments: [
-            {
-              name: newName,
-              summ: newSumm,
-              phone: newPhone,
-              transportCode: newTransportCode,
-              type: type,
-            },
-            ...(data.find(({ date }) => date === "Сегодня")?.payments || []),
-          ],
-        },
-        ...data.filter(({ date }) => date !== "Сегодня"),
-      ]);
+      dispatch(
+        setPayments([
+          {
+            date: "Сегодня",
+            payments: [
+              {
+                name: newName,
+                summ: newSumm,
+                phone: newPhone,
+                transportCode: newTransportCode,
+                type: type,
+              },
+              ...(payments.find(({ date }) => date === "Сегодня")?.payments ||
+                []),
+            ],
+          },
+          ...payments.filter(({ date }) => date !== "Сегодня"),
+        ])
+      );
     }
   };
 

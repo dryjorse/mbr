@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { formatNumber, formatPhone } from "../../constants/utils";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../store/store";
-import { setName } from "../../store/slices/transferSlice";
+import { setName, setPayments } from "../../store/slices/transferSlice";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import somIcon from "../../assets/images/icons/som.svg";
 import arrowDownIcon from "../../assets/images/icons/arrow-down.svg";
@@ -13,9 +13,29 @@ import infoIcon from "../../assets/images/icons/info.svg";
 const ConfirmTransfer: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { balance, summ, phone, name } = useSelector(
+  const { balance, summ, phone, name, payments } = useSelector(
     (state: RootState) => state.transfer
   );
+
+  const onClickConfirm = () => {
+    dispatch(
+      setPayments([
+        {
+          date: "Сегодня",
+          payments: [
+            {
+              name,
+              summ,
+              phone,
+            },
+            ...(payments.find(({ date }) => date === "Сегодня")?.payments ||
+              []),
+          ],
+        },
+        ...payments.filter(({ date }) => date !== "Сегодня"),
+      ])
+    );
+  };
 
   return (
     <div className="h-screen flex flex-col justify-between">
@@ -94,7 +114,7 @@ const ConfirmTransfer: FC = () => {
         </div>
       </div>
       <div>
-        <Link to="/payment" className="btn">
+        <Link onClick={onClickConfirm} to="/payment" className="btn">
           Подтвердить и перевести
         </Link>
         <Link

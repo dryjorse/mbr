@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IPaymentDateType } from "../../types/types";
+import { payments } from "../../constants/data";
 
 interface State {
   phone: number;
   name: string;
   summ: number;
   balance: number;
+  payments: IPaymentDateType[];
 }
 
 const initialState: State = {
@@ -12,6 +15,7 @@ const initialState: State = {
   name: "",
   summ: 0,
   balance: 10543,
+  payments,
 };
 
 const transferSlice = createSlice({
@@ -28,8 +32,12 @@ const transferSlice = createSlice({
     setSumm(state, action: PayloadAction<number>) {
       state.summ = action.payload;
     },
+    setPayments(state, action: PayloadAction<IPaymentDateType[]>) {
+      state.payments = action.payload;
+    },
   },
 });
 
 export default transferSlice.reducer;
-export const { setPhone, setName, setSumm } = transferSlice.actions;
+export const { setPhone, setName, setSumm, setPayments } =
+  transferSlice.actions;
