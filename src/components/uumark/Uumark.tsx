@@ -180,7 +180,7 @@ const Uumark: FC<Props> = ({
             <>
               Перевод по номеру телефона. 996{phone}/
               <br />
-              {name} ./ /
+              {name.replace(/\./g, "")} ./ /
             </>
           )}{" "}
           Сумма <span className="summ">{formatNumber(summ)}</span>
