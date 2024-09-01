@@ -13,7 +13,7 @@ const QrPage: FC = () => {
     const config = {
       fps: 10,
       qrbox: { width: 200, height: 200 },
-      aspectRatio: 9 / 18,
+      aspectRatio: 4 / 3,
     };
     const html5QrCode = new Html5Qrcode("qrCodeContainer");
 
