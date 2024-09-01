@@ -27,7 +27,7 @@ const QrPage: FC = () => {
 
     if (isEnabled) {
       // @ts-ignore
-      html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccess);
+      html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccess);
       setQrMessage("");
     } else {
       qrScanerStop();
@@ -42,7 +42,7 @@ const QrPage: FC = () => {
     <div className="fixed top-0 left-0 w-full h-screen flex justify-center items-center">
       <div
         id="qrCodeContainer"
-        className="relative rounded-[7px] w-[300px] h-[300px] overflow-hidden [&_#qr-shaded-region]:!border-[50px]"
+        className="relative rounded-[7px] w-full h-full overflow-hidden flex justify-center items-center [&_#qr-shaded-region]:!border-[50px] [&_#qr-shaded-region]:w-[300px] [&_#qr-shaded-region]:h-[300px] [&_#qr-shaded-region]:!top-[50%] [&_#qr-shaded-region]:!translate-y-[-50%] [&_#qr-shaded-region]:!left-[50%] [&_#qr-shaded-region]:!translate-x-[-50%]"
       ></div>
     </div>
   );

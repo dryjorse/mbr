@@ -87,7 +87,7 @@ const PasswordPage: FC = () => {
               className={clsx(
                 "rounded-circle border border-grey w-[24px] h-[24px]  trans-def !duration-150",
                 {
-                  "bg-green border-green !w-[18px] h-[18px]":
+                  "bg-green border-green !w-[18px] !h-[18px]":
                     password.length >= key + 1,
                   "!border-red !bg-red": password.length >= 4 && password !== "9999",
                 }
