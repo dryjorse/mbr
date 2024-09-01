@@ -57,7 +57,7 @@ const QrPage: FC = () => {
       >
         <img src={crosssIcon} alt="cross" className="w-[20px]" />
       </button>
-      <span className="absolute top-[110px] text-center font-bold">
+      <span className="absolute top-[100px] text-center font-bold">
         Наведите камеру <br /> на QR или штрих код
       </span>
       <div className="absolute left-[15px] right-[15px] bottom-[30px] flex gap-[15px] justify-center">
