@@ -1,3 +1,5 @@
+import { IType } from "../types/types";
+
 export const formatNumber = (number: number, isAddNull: boolean = true) => {
   let result;
   result =
@@ -23,4 +25,8 @@ export const formatPhone = (phone: number) => {
   return `(${phoneString.slice(0, 3)}) ${phoneString.slice(3, 5)}-${(
     phone + ""
   ).slice(5, 7)}-${phoneString.slice(7, 9)}`;
+};
+
+export const getType = (qrMessage: string): IType => {
+  return qrMessage.match(/tulpar/i) ? "tulpar" : "";
 };

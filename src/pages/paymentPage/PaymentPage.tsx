@@ -12,7 +12,7 @@ import { paymentAtom } from "../../store/store";
 
 const PaymentPage: FC = () => {
   const [isUumarkOpen, setIsUumarkOpen] = useState(false);
-  const [{ summ, phone, name }] = useAtom(paymentAtom);
+  const [{ summ, phone, name, transportCode, type }] = useAtom(paymentAtom);
 
   return (
     <>
@@ -78,7 +78,8 @@ const PaymentPage: FC = () => {
         summState={[summ]}
         nameState={[name || ""]}
         phoneState={[phone || 0]}
-        type={""}
+        transportCodeState={[transportCode || 0]}
+        type={type}
       />
     </>
   );

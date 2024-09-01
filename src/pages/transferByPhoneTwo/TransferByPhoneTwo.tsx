@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { formatNumber, formatPhone } from "../../constants/utils";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
@@ -7,7 +7,8 @@ import profileIcon from "../../assets/images/icons/profile.svg";
 import arrowDownIcon from "../../assets/images/icons/arrow-down.svg";
 import clsx from "clsx";
 import { useAtom } from "jotai";
-import { balanceAtom, paymentAtom } from "../../store/store";
+import { balanceAtom, paymentAtom, qrMessageAtom } from "../../store/store";
+import { useGetPaymentType } from "../../hooks/useGetPaymentType";
 
 const TransferByPhoneTwo: FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,12 @@ const TransferByPhoneTwo: FC = () => {
   const [message, setMessage] = useState("");
   const [payment, setPayment] = useAtom(paymentAtom);
   const [balance] = useAtom(balanceAtom);
+  const [qrMessage] = useAtom(qrMessageAtom);
+  const type = useGetPaymentType();
+
+  useEffect(() => {
+    if (type === "tulpar") setPayment({ ...payment, summ: 17.0 });
+  }, [type]);
 
   return (
     <div>
@@ -22,7 +29,11 @@ const TransferByPhoneTwo: FC = () => {
         <button onClick={() => navigate(-1)}>
           <img src={arrowIcon} alt="arrow" className="w-[15px]" />
         </button>
-        <h1 className="text-[16px]">Перевод по номеру телефона</h1>
+        <h1 className="text-[16px]">
+          {type === "tulpar"
+            ? "Тулпар - оплата за проезд"
+            : "Перевод по номеру телефона"}
+        </h1>
       </div>
       <div className="relative mt-20 mb-[15px] rounded-[18px] p-[15px] flex gap-[13px] items-center bg-gray">
         <img src={somIcon} alt="som" className="w-[40px]" />
@@ -38,27 +49,41 @@ const TransferByPhoneTwo: FC = () => {
             ,00 <span className="som text-[15px]">C</span>
           </span>
         </div>
-        <div className="absolute left-[50%] bottom-[-20px] translate-x-[-50%] rounded-circle border border-black bg-gray w-[30px] h-[30px] flex justify-center items-center">
-          <img src={arrowDownIcon} alt="arrow-down" className="w-[10px]" />
-        </div>
+        {type === "" && (
+          <div className="absolute left-[50%] bottom-[-20px] translate-x-[-50%] rounded-circle border border-black bg-gray w-[30px] h-[30px] flex justify-center items-center">
+            <img src={arrowDownIcon} alt="arrow-down" className="w-[10px]" />
+          </div>
+        )}
       </div>
       <div className="rounded-[18px] p-[15px] bg-gray flex justify-between items-center">
         <div className="flex gap-[13px] items-center">
-          <div className="rounded-circle w-[40px] h-[40px] flex justify-center items-center bg-[#272729]">
-            <img src={profileIcon} alt="profile" className="w-[15px]" />
-          </div>
+          {type === "" && (
+            <div className="rounded-circle w-[40px] h-[40px] flex justify-center items-center bg-[#272729]">
+              <img src={profileIcon} alt="profile" className="w-[15px]" />
+            </div>
+          )}
           <div className="flex flex-col">
-            <input
-              value={payment.name}
-              className="rounded-none text-grey leading-[16px] bg-transparent p-0"
-              onChange={({ target: { value } }) =>
-                setPayment({ ...payment, name: value })
-              }
-            />
-            <strong>996 {formatPhone(payment.phone || 0)}</strong>
+            {type === "tulpar" ? (
+              <span className="text-grey leading-[16px]">Код транспорта</span>
+            ) : (
+              <input
+                value={payment.name}
+                className="rounded-none text-grey leading-[16px] bg-transparent p-0"
+                onChange={({ target: { value } }) =>
+                  setPayment({ ...payment, name: value })
+                }
+              />
+            )}
+            <strong>
+              {type === "tulpar"
+                ? qrMessage.replace(/tulpar/i, "")
+                : `996 ${formatPhone(payment.phone || 0)}`}
+            </strong>
           </div>
         </div>
-        <strong className="som text-grey text-[21px]">C</strong>
+        {type === "" && (
+          <strong className="som text-grey text-[21px]">C</strong>
+        )}
       </div>
       <div className="my-[15px] rounded-[18px] p-[15px] flex flex-col items-center bg-gray">
         <div className="flex text-[26px] font-bold">
@@ -80,52 +105,56 @@ const TransferByPhoneTwo: FC = () => {
           Коммиссия 0,00 <strong className="som">C</strong>
         </span>
       </div>
-      <div className="flex gap-[7px] items-end">
-        <div className="relative py-[20px] pb-[15px] px-[15px] rounded-[18px_18px_4px_18px] flex-auto bg-gray">
-          <span
-            className={clsx(
-              "absolute  text-[12px] text-grey trans-def pointer-events-none",
-              {
-                "top-[18px]": !(isMessageFocused || message),
-                "text-[9px] top-[7px]": isMessageFocused || message,
-              }
-            )}
-          >
-            Сообщение получателю
-          </span>
-          <input
-            type="text"
-            value={message}
-            onFocus={() => setIsMessageFocused(true)}
-            onBlur={() => setIsMessageFocused(false)}
-            onChange={({ target: { value } }) => setMessage(value)}
-            className="rounded-none p-0 bg-transparent w-full text-[13px]"
-          />
-        </div>
-        <div className="rounded-circle bg-gray flex justify-center items-center w-[35px] h-[35px]">
-          <img src={profileIcon} alt="profile" className="w-[12px]" />
-        </div>
-      </div>
-      <div className="mt-10 mb-30 pr-[42px] flex gap-[10px] justify-end items-center text-[14px]">
-        <button
-          onClick={() => setMessage("Рахмат!")}
-          className="rounded-[18px] py-[3px] px-[15px] bg-gray"
-        >
-          Рахмат!
-        </button>
-        <button
-          onClick={() => setMessage("За обед")}
-          className="rounded-[18px] py-[3px] px-[15px] bg-gray"
-        >
-          За обед
-        </button>
-        <button
-          onClick={() => setMessage("Такси")}
-          className="rounded-[18px] py-[3px] px-[15px] bg-gray"
-        >
-          Такси
-        </button>
-      </div>
+      {type === "" && (
+        <>
+          <div className="flex gap-[7px] items-end">
+            <div className="relative py-[20px] pb-[15px] px-[15px] rounded-[18px_18px_4px_18px] flex-auto bg-gray">
+              <span
+                className={clsx(
+                  "absolute  text-[12px] text-grey trans-def pointer-events-none",
+                  {
+                    "top-[18px]": !(isMessageFocused || message),
+                    "text-[9px] top-[7px]": isMessageFocused || message,
+                  }
+                )}
+              >
+                Сообщение получателю
+              </span>
+              <input
+                type="text"
+                value={message}
+                onFocus={() => setIsMessageFocused(true)}
+                onBlur={() => setIsMessageFocused(false)}
+                onChange={({ target: { value } }) => setMessage(value)}
+                className="rounded-none p-0 bg-transparent w-full text-[13px]"
+              />
+            </div>
+            <div className="rounded-circle bg-gray flex justify-center items-center w-[35px] h-[35px]">
+              <img src={profileIcon} alt="profile" className="w-[12px]" />
+            </div>
+          </div>
+          <div className="mt-10 mb-30 pr-[42px] flex gap-[10px] justify-end items-center text-[14px]">
+            <button
+              onClick={() => setMessage("Рахмат!")}
+              className="rounded-[18px] py-[3px] px-[15px] bg-gray"
+            >
+              Рахмат!
+            </button>
+            <button
+              onClick={() => setMessage("За обед")}
+              className="rounded-[18px] py-[3px] px-[15px] bg-gray"
+            >
+              За обед
+            </button>
+            <button
+              onClick={() => setMessage("Такси")}
+              className="rounded-[18px] py-[3px] px-[15px] bg-gray"
+            >
+              Такси
+            </button>
+          </div>
+        </>
+      )}
       <Link
         to="/confirm-transfer"
         className={clsx("btn", {
