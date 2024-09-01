@@ -2,12 +2,12 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useAtom } from "jotai";
 import { FC, useEffect, useState } from "react";
 import { qrMessageAtom } from "../../store/store";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const QrPage: FC = () => {
   const [isEnabled, setIsEnabled] = useState(true);
-  const [qrMessage, setQrMessage] = useAtom(qrMessageAtom);
-  const navigate = useNavigate();
+  const [_, setQrMessage] = useAtom(qrMessageAtom);
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const config = { fps: 10, qrbox: { width: 200, height: 200 } };
