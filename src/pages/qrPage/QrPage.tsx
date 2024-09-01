@@ -10,7 +10,11 @@ const QrPage: FC = () => {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+    const config = {
+      fps: 10,
+      qrbox: { width: 200, height: 200 },
+      aspectRatio: 9 / 18,
+    };
     const html5QrCode = new Html5Qrcode("qrCodeContainer");
 
     const qrScanerStop = () => {
@@ -42,7 +46,7 @@ const QrPage: FC = () => {
     <div className="fixed top-0 left-0 w-full h-screen flex justify-center items-center">
       <div
         id="qrCodeContainer"
-        className="relative rounded-[7px] w-full h-full overflow-hidden flex justify-center items-center [&_#qr-shaded-region]:!border-[50px] [&_#qr-shaded-region]:w-[300px] [&_#qr-shaded-region]:h-[300px] [&_#qr-shaded-region]:!top-[50%] [&_#qr-shaded-region]:!translate-y-[-50%] [&_#qr-shaded-region]:!left-[50%] [&_#qr-shaded-region]:!translate-x-[-50%]"
+        className="relative rounded-[7px] w-full h-full overflow-hidden flex justify-center items-center [&_#qr-shaded-region]:!border-[0px] [&_#qr-shaded-region]:w-[300px] [&_#qr-shaded-region]:h-[300px] [&_#qr-shaded-region]:!top-[50%] [&_#qr-shaded-region]:!translate-y-[-50%] [&_#qr-shaded-region]:!left-[50%] [&_#qr-shaded-region]:!translate-x-[-50%]"
       ></div>
     </div>
   );
