@@ -9,9 +9,8 @@ import repeatIcon from "../../assets/images/icons/repeat.svg";
 import favouriteIcon from "../../assets/images/icons/favourite.svg";
 import clsx from "clsx";
 import { IType } from "../../types/types";
-import { RootState, useAppDispatch } from "../../store/store";
-import { setPayments } from "../../store/slices/transferSlice";
-import { useSelector } from "react-redux";
+import { useAtom } from "jotai";
+import { paymentsAtom } from "../../store/store";
 
 interface Props {
   isOpen: boolean;
@@ -32,13 +31,12 @@ const Uumark: FC<Props> = ({
   type,
   transportCodeState,
 }) => {
-  const dispatch = useAppDispatch();
   const [summ, setSumm] = summState;
   const [name, setName] = nameState;
   const [phone, setPhone] = phoneState;
   const [transportCode, setTransportCode] = transportCodeState || [];
   const [clicks, setClicks] = useState(0);
-  const { payments } = useSelector((state: RootState) => state.transfer);
+  const [payments, setPayments] = useAtom(paymentsAtom);
 
   const date = new Date();
   const currentDate = `${formatNumber(date.getDate())}.${formatNumber(
@@ -88,25 +86,23 @@ const Uumark: FC<Props> = ({
       setPhone?.(newPhone);
       setTransportCode?.(newTransportCode);
 
-      dispatch(
-        setPayments([
-          {
-            date: "Сегодня",
-            payments: [
-              {
-                name: newName,
-                summ: newSumm,
-                phone: newPhone,
-                transportCode: newTransportCode,
-                type: type,
-              },
-              ...(payments.find(({ date }) => date === "Сегодня")?.payments ||
-                []),
-            ],
-          },
-          ...payments.filter(({ date }) => date !== "Сегодня"),
-        ])
-      );
+      setPayments([
+        {
+          date: "Сегодня",
+          payments: [
+            {
+              name: newName,
+              summ: newSumm,
+              phone: newPhone,
+              transportCode: newTransportCode,
+              type: type,
+            },
+            ...(payments.find(({ date }) => date === "Сегодня")?.payments ||
+              []),
+          ],
+        },
+        ...payments.filter(({ date }) => date !== "Сегодня"),
+      ]);
     }
   };
 

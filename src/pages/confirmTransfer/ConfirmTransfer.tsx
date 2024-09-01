@@ -1,40 +1,35 @@
 import { FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { formatNumber, formatPhone } from "../../constants/utils";
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../../store/store";
-import { setName, setPayments } from "../../store/slices/transferSlice";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import somIcon from "../../assets/images/icons/som.svg";
 import arrowDownIcon from "../../assets/images/icons/arrow-down.svg";
 import profileIcon from "../../assets/images/icons/profile.svg";
 import infoIcon from "../../assets/images/icons/info.svg";
+import { useAtom } from "jotai";
+import { balanceAtom, paymentAtom, paymentsAtom } from "../../store/store";
 
 const ConfirmTransfer: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { balance, summ, phone, name, payments } = useSelector(
-    (state: RootState) => state.transfer
-  );
+  const [{ summ, phone, name, ...payment }, setPayment] = useAtom(paymentAtom);
+  const [payments, setPayments] = useAtom(paymentsAtom);
+  const [balance] = useAtom(balanceAtom);
 
   const onClickConfirm = () => {
-    dispatch(
-      setPayments([
-        {
-          date: "Сегодня",
-          payments: [
-            {
-              name,
-              summ,
-              phone,
-            },
-            ...(payments.find(({ date }) => date === "Сегодня")?.payments ||
-              []),
-          ],
-        },
-        ...payments.filter(({ date }) => date !== "Сегодня"),
-      ])
-    );
+    setPayments([
+      {
+        date: "Сегодня",
+        payments: [
+          {
+            name,
+            summ,
+            phone,
+          },
+          ...(payments.find(({ date }) => date === "Сегодня")?.payments || []),
+        ],
+      },
+      ...payments.filter(({ date }) => date !== "Сегодня"),
+    ]);
   };
 
   return (
@@ -73,12 +68,11 @@ const ConfirmTransfer: FC = () => {
               <input
                 value={name}
                 className="rounded-none text-grey leading-[16px] bg-transparent p-0"
-                onChange={({ target: { value } }) => {
-                  console.log(value);
-                  dispatch(setName(value));
-                }}
+                onChange={({ target: { value } }) =>
+                  setPayment({ summ, phone, name: value, ...payment })
+                }
               />
-              <strong>996 {formatPhone(phone)}</strong>
+              <strong>996 {formatPhone(phone || 0)}</strong>
             </div>
           </div>
           <strong className="som text-grey text-[21px]">C</strong>

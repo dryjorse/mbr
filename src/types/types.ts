@@ -1,12 +1,12 @@
 export type IType = "" | "tulpar";
-export interface IPaymentType {
+export interface IPayment {
   name?: string;
   summ: number;
   phone?: number;
   type?: IType;
   transportCode?: number;
 }
-export interface IPaymentDateType {
+export interface IPaymentDate {
   date: string;
-  payments: IPaymentType[];
+  payments: IPayment[];
 }

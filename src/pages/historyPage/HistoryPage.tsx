@@ -1,14 +1,14 @@
 import { FC, Fragment, useState } from "react";
 import Uumark from "../../components/uumark/Uumark";
 import clsx from "clsx";
-import { IPaymentType, IType } from "../../types/types";
+import { IPayment, IType } from "../../types/types";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import arrowWhiteIcon from "../../assets/images/icons/arrow-white.svg";
 import incomeIcon from "../../assets/images/icons/income.svg";
 import tulparIcon from "../../assets/images/icons/tulpar.svg";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useAtom } from "jotai";
+import { paymentsAtom } from "../../store/store";
 
 const HistoryPage: FC = () => {
   const [summ, setSumm] = useState(1000);
@@ -17,10 +17,10 @@ const HistoryPage: FC = () => {
   const [transportCode, setTransportCode] = useState(1517);
   const [type, setType] = useState<IType>("");
   const [isUumarkOpen, setIsUumarkOpen] = useState(false);
-  const { payments } = useSelector((state: RootState) => state.transfer);
+  const [payments] = useAtom(paymentsAtom);
   const navigate = useNavigate();
 
-  const onClickPayment = (data: IPaymentType) => {
+  const onClickPayment = (data: IPayment) => {
     setSumm(data.summ);
     data.name && setName(data.name);
     data.phone && setPhone(data.phone);

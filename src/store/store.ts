@@ -1,15 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-import transferSlice from "./slices/transferSlice";
+import { atom } from "jotai";
+import { IPayment, IPaymentDate } from "../types/types";
+import { payments } from "../constants/data";
 
-export const store = configureStore({
-  reducer: {
-    transfer: transferSlice,
-  },
-});
-
-export type RootState = ReturnType<typeof store.getState>;
-
-export type AppDispatch = typeof store.dispatch;
-
-export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const paymentsAtom = atom<IPaymentDate[]>(payments);
+export const paymentAtom = atom<IPayment>({ summ: 0 });
+export const balanceAtom = atom(13407);
+export const isPasswordEnteredAtom = atom(false);
+export const qrMessageAtom = atom("");

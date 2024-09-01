@@ -1,23 +1,20 @@
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../../store/store";
 import { formatNumber, formatPhone } from "../../constants/utils";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import somIcon from "../../assets/images/icons/som.svg";
 import profileIcon from "../../assets/images/icons/profile.svg";
 import arrowDownIcon from "../../assets/images/icons/arrow-down.svg";
-import { setName, setSumm } from "../../store/slices/transferSlice";
 import clsx from "clsx";
+import { useAtom } from "jotai";
+import { balanceAtom, paymentAtom } from "../../store/store";
 
 const TransferByPhoneTwo: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [isMessageFocused, setIsMessageFocused] = useState(false);
   const [message, setMessage] = useState("");
-  const { balance, name, phone, summ } = useSelector(
-    (state: RootState) => state.transfer
-  );
+  const [payment, setPayment] = useAtom(paymentAtom);
+  const [balance] = useAtom(balanceAtom);
 
   return (
     <div>
@@ -52,14 +49,13 @@ const TransferByPhoneTwo: FC = () => {
           </div>
           <div className="flex flex-col">
             <input
-              value={name}
+              value={payment.name}
               className="rounded-none text-grey leading-[16px] bg-transparent p-0"
-              onChange={({ target: { value } }) => {
-                console.log(value);
-                dispatch(setName(value));
-              }}
+              onChange={({ target: { value } }) =>
+                setPayment({ ...payment, name: value })
+              }
             />
-            <strong>996 {formatPhone(phone)}</strong>
+            <strong>996 {formatPhone(payment.phone || 0)}</strong>
           </div>
         </div>
         <strong className="som text-grey text-[21px]">C</strong>
@@ -68,10 +64,12 @@ const TransferByPhoneTwo: FC = () => {
         <div className="flex text-[26px] font-bold">
           <input
             type="number"
-            style={{ width: (summ + "").length * 16 }}
+            style={{ width: (payment.summ + "").length * 16 }}
             placeholder="0"
-            value={summ || ""}
-            onChange={({ target: { value } }) => dispatch(setSumm(+value))}
+            value={payment.summ || ""}
+            onChange={({ target: { value } }) =>
+              setPayment({ ...payment, summ: +value })
+            }
             className="rounded-none p-0 bg-transparent w-[19px] placeholder:text-[#6B6C70]"
           />
           <span className="ml-[5px] som text-[22px] text-[#6B6C70] font-extrabold">
@@ -130,15 +128,15 @@ const TransferByPhoneTwo: FC = () => {
       </div>
       <Link
         to="/confirm-transfer"
-        className={clsx(
-          "btn",
-          { "!bg-[#6B6C70] !text-white pointer-events-none": !summ }
-        )}
+        className={clsx("btn", {
+          "!bg-[#6B6C70] !text-white pointer-events-none": !payment.summ,
+        })}
       >
         Перевести{" "}
-        {!!summ && (
+        {!!payment.summ && (
           <>
-            {summ},00 <span className="som block mt-[-6px] text-[20px]">c</span>
+            {payment.summ},00{" "}
+            <span className="som block mt-[-6px] text-[20px]">c</span>
           </>
         )}
       </Link>

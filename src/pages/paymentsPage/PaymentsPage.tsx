@@ -20,8 +20,8 @@ import qrIcon from "../../assets/images/icons/qr.svg";
 import russiaIcon from "../../assets/images/icons/russia.svg";
 import moneyQueriesIcon from "../../assets/images/icons/money-queries.svg";
 import markIcon from "../../assets/images/icons/mark-small.svg";
-import { useAppDispatch } from "../../store/store";
-import { setName, setPhone } from "../../store/slices/transferSlice";
+import { useAtom } from "jotai";
+import { paymentAtom } from "../../store/store";
 
 const transtactionTypes = [
   { icon: worldIcon, title: "В другую страну", isNew: true },
@@ -75,8 +75,8 @@ const paymentsPlaceholders = [
 ];
 
 const PaymentsPage: FC = () => {
-  const dispatch = useAppDispatch();
   const controls = useAnimation();
+  const [payment, setPayment] = useAtom(paymentAtom);
   const { scrollY } = useViewportScroll();
 
   useEffect(() => {
@@ -139,8 +139,11 @@ const PaymentsPage: FC = () => {
         {contacts.map((contact) => (
           <Link
             onClick={() => {
-              dispatch(setName(contact.fullname));
-              dispatch(setPhone(contact.tel));
+              setPayment({
+                ...payment,
+                name: contact.fullname,
+                phone: contact.tel,
+              });
             }}
             key={contact.name}
             to="/transfer-by-phone2"

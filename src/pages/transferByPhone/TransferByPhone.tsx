@@ -4,10 +4,9 @@ import arrowIcon from "../../assets/images/icons/arrow.svg";
 import kgIcon from "../../assets/images/icons/kg.svg";
 import crossIcon from "../../assets/images/icons/cross-small.svg";
 import markIcon from "../../assets/images/icons/mark-small.svg";
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../../store/store";
-import { setName, setPhone } from "../../store/slices/transferSlice";
 import { formatPhone } from "../../constants/utils";
+import { useAtom } from "jotai";
+import { paymentAtom } from "../../store/store";
 
 const contacts = [
   {
@@ -42,24 +41,22 @@ const contacts = [
 
 const TransferByPhone: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { phone } = useSelector((state: RootState) => state.transfer);
+  const [payment, setPayment] = useAtom(paymentAtom);
 
   const currentContacts =
-    (phone + "").length >= 9
+    ((payment.phone || 0) + "").length >= 9
       ? [
           {
             name: "Загрузка...",
             fullname: "Загрузка...",
-            phone,
+            phone: payment.phone,
             isMarked: false,
           },
         ]
       : contacts;
 
   const onClickContact = (fullname: string, phone: number) => {
-    dispatch(setName(fullname));
-    dispatch(setPhone(phone));
+    setPayment({ ...payment, name: fullname, phone });
   };
 
   return (
@@ -80,12 +77,14 @@ const TransferByPhone: FC = () => {
             type="text"
             className="bg-transparent"
             placeholder="Номер телефона или имя"
-            value={phone || ""}
-            onChange={({ target: { value } }) => dispatch(setPhone(+value))}
+            value={payment.phone || ""}
+            onChange={({ target: { value } }) =>
+              setPayment({ ...payment, phone: +value })
+            }
           />
         </div>
-        {!!phone && (
-          <button onClick={() => dispatch(setPhone(0))}>
+        {!!payment.phone && (
+          <button onClick={() => setPayment({ ...payment, phone: 0 })}>
             <img src={crossIcon} alt="cross" className="w-[20px]" />
           </button>
         )}
@@ -102,7 +101,9 @@ const TransferByPhone: FC = () => {
               )}
               <Link
                 to="/transfer-by-phone2"
-                onClick={() => fullname && onClickContact(fullname, +phone)}
+                onClick={() =>
+                  fullname && onClickContact(fullname, +(phone || 0))
+                }
                 className="py-[7px] px-20 flex gap-[20px] items-center"
               >
                 <span className="relative border border-[#2F2F31] rounded-circle w-[40px] h-[40px] flex justify-center items-center text-grey">
@@ -123,7 +124,9 @@ const TransferByPhone: FC = () => {
                   <span>{name}</span>
                   <span className="text-[12px] text-grey">
                     {(phone + "").length >= 4 && "996 "}
-                    {(phone + "").length >= 4 ? formatPhone(+phone) : phone}
+                    {(phone + "").length >= 4
+                      ? formatPhone(+(phone || 0))
+                      : phone}
                   </span>
                 </div>
               </Link>

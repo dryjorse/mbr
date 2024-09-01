@@ -1,7 +1,5 @@
 import { FC, useState } from "react";
 import processingIcon from "../../assets/images/icons/processing.svg";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import { formatNumber } from "../../constants/utils";
 import repeatIcon from "../../assets/images/icons/repeat-white.svg";
 import timeIcon from "../../assets/images/icons/time.svg";
@@ -9,12 +7,12 @@ import favouriteIcon from "../../assets/images/icons/favourite-white.svg";
 import { Link } from "react-router-dom";
 import Uumark from "../../components/uumark/Uumark";
 import clsx from "clsx";
+import { useAtom } from "jotai";
+import { paymentAtom } from "../../store/store";
 
 const PaymentPage: FC = () => {
   const [isUumarkOpen, setIsUumarkOpen] = useState(false);
-  const { summ, phone, name } = useSelector(
-    (state: RootState) => state.transfer
-  );
+  const [{ summ, phone, name }] = useAtom(paymentAtom);
 
   return (
     <>
@@ -78,8 +76,8 @@ const PaymentPage: FC = () => {
         isOpen={isUumarkOpen}
         close={() => setIsUumarkOpen(false)}
         summState={[summ]}
-        nameState={[name]}
-        phoneState={[phone]}
+        nameState={[name || ""]}
+        phoneState={[phone || 0]}
         type={""}
       />
     </>

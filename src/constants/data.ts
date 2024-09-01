@@ -1,6 +1,8 @@
-import { IPaymentDateType } from "../types/types";
+import { IPaymentDate } from "../types/types";
 
-export const payments: IPaymentDateType[] = [
+export const password = 9999;
+
+export const payments: IPaymentDate[] = [
   {
     date: "Сегодня",
     payments: [{ summ: 150, name: "Улан К", phone: 220637742 }],
