@@ -7,8 +7,6 @@ const PasswordProvider: FC<PropsWithChildren> = ({ children }) => {
   const [isPasswordEntered] = useAtom(isPasswordEnteredAtom);
   const { pathname } = useLocation();
 
-  return children;
-
   return !isPasswordEntered && !pathname.match(/password/i) ? (
     <Navigate to="/password" />
   ) : (
