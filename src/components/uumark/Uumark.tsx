@@ -152,7 +152,7 @@ const Uumark: FC<Props> = ({
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Оплачено со счета</span>
-          <span>1030120546212789</span>
+          <span>10301708434215329</span>
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Дата операции</span>
