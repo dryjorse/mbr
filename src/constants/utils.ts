@@ -30,3 +30,8 @@ export const formatPhone = (phone: number) => {
 export const getType = (qrMessage: string): IType => {
   return qrMessage.match(/tulpar/i) ? "tulpar" : "";
 };
+
+export const capitalizeName = (name: string) => {
+  name = name.toLowerCase();
+  return name.charAt(0).toUpperCase() + name.slice(1);
+};

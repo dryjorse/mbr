@@ -1,16 +1,24 @@
 import { Html5Qrcode } from "html5-qrcode";
 import { useAtom } from "jotai";
 import { FC, useEffect, useState } from "react";
-import { qrMessageAtom } from "../../store/store";
+import { paymentAtom, qrMessageAtom } from "../../store/store";
 import qrCodeIcon from "../../assets/images/icons/qr-white.svg";
 import galleryIcon from "../../assets/images/icons/gallery.svg";
 import crosssIcon from "../../assets/images/icons/cross-white.svg";
 import { useNavigate } from "react-router-dom";
+import { capitalizeName } from "../../constants/utils";
 
 const QrPage: FC = () => {
   const [isEnabled, setIsEnabled] = useState(true);
+  const [payment, setPayment] = useAtom(paymentAtom);
   const [_, setQrMessage] = useAtom(qrMessageAtom);
   const navigate = useNavigate();
+
+  // console.log(
+  //   decodeURIComponent(
+  //     "%D0%90%D0%91%D0%94%D0%A3%D0%9B%D0%90%D0%97%D0%98%D0%9C%20%D0%9A."
+  //   )
+  // );
 
   useEffect(() => {
     const config = {
@@ -27,6 +35,16 @@ const QrPage: FC = () => {
     };
 
     const qrCodeSuccess = (decodedText: string) => {
+      const fullname = decodeURIComponent(decodedText.slice(83).split(".")[0]);
+      if (decodedText.match(/app.mbank.kg/i)) {
+        setPayment({
+          ...payment,
+          phone: +decodedText.slice(70, 79),
+          name: `${capitalizeName(fullname.split(" ")[0])} ${
+            fullname.split(" ")[1]
+          }.`,
+        });
+      }
       setQrMessage(decodedText);
       setIsEnabled(false);
       navigate("/transfer-by-phone2");
