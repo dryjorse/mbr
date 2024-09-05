@@ -1,12 +1,7 @@
 import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { contacts } from "../../constants/data";
-import {
-  motion,
-  useAnimation,
-  useScroll,
-  useViewportScroll,
-} from "framer-motion";
+import { motion, useAnimation, useScroll } from "framer-motion";
 import { randomInteger } from "../../constants/utils";
 import searchIcon from "../../assets/images/icons/search.svg";
 import phoneIcon from "../../assets/images/icons/phone.svg";
