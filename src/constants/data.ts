@@ -140,6 +140,7 @@ export const paymentsData: ICustomPayment[] = [
 ];
 
 export const contacts = [
-  { name: "Дунду", tel: 228903050, fullname: "Абдуннур А." },
-  { name: "Жума", tel: 706309316, fullname: "Эржан Ж." },
+  { name: "Чолпон", tel: 704138168, fullname: "Чолпон У." },
+  { name: "Руси", tel: 550808813, fullname: "Рыспек Б." },
+  { name: "Ади", tel: 502822053, fullname: "Адилет М." },
 ];

@@ -32,3 +32,19 @@ export const saveTokens = (accessToken: string, refreshToken: string) => {
   localStorage.setItem("mbr-access-token", accessToken);
   Cookies.set("mbr-refresh-token", refreshToken, { expires: 30 });
 };
+
+export const getCurrentMonth = () =>
+  [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+  ][new Date().getMonth()];

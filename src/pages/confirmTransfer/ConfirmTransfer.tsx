@@ -38,7 +38,7 @@ const ConfirmTransfer: FC = () => {
               <span className="text-[50px] leading-[0px] tracking-[-3px]">
                 ..
               </span>
-              2563
+              {(profile?.account + "").slice(-4)}
             </span>
             <span className="font-bold text-[17px]">
               <span className="text-white">

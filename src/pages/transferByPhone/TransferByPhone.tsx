@@ -9,24 +9,9 @@ import { useAtom } from "jotai";
 import { paymentAtom } from "../../store/store";
 
 const contacts = [
-  {
-    name: "Ummi",
-    phone: 755010965,
-    fullname: "Бейшекан А.",
-    isMarked: true,
-  },
-  {
-    name: "Дунду",
-    phone: 228903050,
-    fullname: "Абдуннур А.",
-    isMarked: true,
-  },
-  {
-    name: "Жума",
-    phone: 706309316,
-    fullname: "Эржан Ж.",
-    isMarked: true,
-  },
+  { name: "Чолпон", phone: 704138168, fullname: "Чолпон У.", isMarked: true },
+  { name: "Руси", phone: 550808813, fullname: "Чолпон У.", isMarked: true },
+  { name: "Ади", phone: 502822053, fullname: "Адилет М.", isMarked: true },
   { name: "WhatsApp MEGA", phone: 999500000 },
   { name: "Контакт-Центр MEGA", phone: "500" },
   { name: "Милиция", phone: "102" },

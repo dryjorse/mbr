@@ -28,7 +28,7 @@ const PasswordPage: FC = () => {
       password === "9999" && setIsPasswordEntered(true);
       timeout = setTimeout(() => {
         if (password === "9999") {
-          navigate("/payments");
+          navigate("/");
         } else setPassword("");
       }, 2000);
     }

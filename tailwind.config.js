@@ -13,6 +13,7 @@ const colors = {
   red: "#E34C4A",
   yellow: "#FABF01",
   orange: "#F87017",
+  blue: "#3A8BFF",
 };
 
 export default {

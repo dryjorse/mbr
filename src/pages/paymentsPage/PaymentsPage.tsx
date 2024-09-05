@@ -1,7 +1,12 @@
 import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { contacts } from "../../constants/data";
-import { motion, useAnimation, useViewportScroll } from "framer-motion";
+import {
+  motion,
+  useAnimation,
+  useScroll,
+  useViewportScroll,
+} from "framer-motion";
 import { randomInteger } from "../../constants/utils";
 import searchIcon from "../../assets/images/icons/search.svg";
 import phoneIcon from "../../assets/images/icons/phone.svg";
@@ -77,7 +82,7 @@ const paymentsPlaceholders = [
 const PaymentsPage: FC = () => {
   const controls = useAnimation();
   const [payment, setPayment] = useAtom(paymentAtom);
-  const { scrollY } = useViewportScroll();
+  const { scrollY } = useScroll();
 
   useEffect(() => {
     const updateFontSize = () => {
@@ -88,7 +93,7 @@ const PaymentsPage: FC = () => {
       }
     };
 
-    const unsubscribe = scrollY.onChange(updateFontSize);
+    const unsubscribe = scrollY.on("change", updateFontSize);
 
     return () => unsubscribe();
   }, [controls, scrollY]);
