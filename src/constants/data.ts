@@ -1,8 +1,12 @@
 import { IPayment } from "../types/types";
 
+interface ICustomPayment extends Omit<IPayment, "summ"> {
+  summ: string;
+}
+
 export const password = 9999;
 
-export const paymentsData: IPayment[] = [
+export const paymentsData: ICustomPayment[] = [
   {
     id: 0,
     type: "transfer",
@@ -10,7 +14,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 150,
+    summ: "150.00",
     fullname: "Улан К.",
     phone: 220637742,
   },
@@ -21,7 +25,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 300,
+    summ: "300.00",
     fullname: "Абдуннур А.",
     phone: 228903050,
   },
@@ -32,7 +36,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 75,
+    summ: "75.00",
     fullname: "Эржан Ж.",
     phone: 706309316,
   },
@@ -42,7 +46,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 17,
+    summ: "17.00",
     type: "tulpar",
     transport_code: 1517,
   },
@@ -53,7 +57,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 560,
+    summ: "560.00",
     fullname: "Наргуль Б.",
     phone: 505851080,
   },
@@ -63,7 +67,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 17,
+    summ: "17.00",
     type: "tulpar",
     transport_code: 1517,
   },
@@ -74,7 +78,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 90,
+    summ: "90.00",
     fullname: "Динара А.",
     phone: 702070705,
   },
@@ -85,7 +89,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 400,
+    summ: "400.00",
     fullname: "Адилет М.",
     phone: 502822053,
   },
@@ -96,7 +100,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 100,
+    summ: "100.00",
     fullname: "Рыспек Б.",
     phone: 550808813,
   },
@@ -107,7 +111,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 90,
+    summ: "90.00",
     fullname: "Чолпон У.",
     phone: 704138168,
   },
@@ -118,7 +122,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 300,
+    summ: "300.00",
     fullname: "Элзат Н.",
     phone: 508066091,
   },
@@ -129,7 +133,7 @@ export const paymentsData: IPayment[] = [
     receipt_number: "Р0902165728304",
     is_success: true,
     created_at: new Date(),
-    summ: 70,
+    summ: "70.00",
     fullname: "Айазада Ж.",
     phone: 999591994,
   },

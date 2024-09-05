@@ -79,11 +79,14 @@ const HistoryPage: FC = () => {
                       </div>
                     </div>
                     <span
-                      className={clsx("pt-10 whitespace-nowrap text-center leading-[19px]", {
-                        "text-red": !pm.is_success,
-                      })}
+                      className={clsx(
+                        "pt-10 whitespace-nowrap text-center leading-[19px]",
+                        {
+                          "text-red": !pm.is_success,
+                        }
+                      )}
                     >
-                      {(pm.summ as unknown as string).replace(/\./, ",")}{" "}
+                      {((pm.summ as unknown as string) + "").replace(/\./, ",")}{" "}
                       <span className="underline text-[15px]">C</span>
                       {!pm.is_success && (
                         <>
