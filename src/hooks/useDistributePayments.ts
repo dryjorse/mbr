@@ -47,19 +47,19 @@ export const useDistributePayments = (payments: IPayment[]) => {
     date: formatDate(yesterday),
     payments: paymentsData
       .map((payment) => ({ ...payment, created_at: yesterday }))
-      .slice(0, 4),
+      .slice(0, 4) as unknown as IPayment[],
   });
   groupedPayments.push({
     date: formatDate(twoDaysAgo),
     payments: paymentsData
       .map((payment) => ({ ...payment, created_at: twoDaysAgo }))
-      .slice(4, 8),
+      .slice(4, 8) as unknown as IPayment[],
   });
   groupedPayments.push({
     date: formatDate(threeDaysAgo),
     payments: paymentsData
       .map((payment) => ({ ...payment, created_at: threeDaysAgo }))
-      .slice(8, 12),
+      .slice(8, 12) as unknown as IPayment[],
   });
 
   const today = new Date();
