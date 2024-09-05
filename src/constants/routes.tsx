@@ -1,3 +1,4 @@
+import AuthPage from "../pages/authPage/AuthPage";
 import ConfirmTransfer from "../pages/confirmTransfer/ConfirmTransfer";
 import HistoryPage from "../pages/historyPage/HistoryPage";
 import MainPage from "../pages/mainPage/MainPage";
@@ -11,6 +12,7 @@ import TransferByPhoneTwo from "../pages/transferByPhoneTwo/TransferByPhoneTwo";
 export const routes = [
   { path: "/", element: <MainPage /> },
   { path: "/password", element: <PasswordPage /> },
+  { path: "/auth", element: <AuthPage /> },
   { path: "/qr", element: <QrPage /> },
   { path: "/payments", element: <PaymentsPage /> },
   { path: "/history", element: <HistoryPage /> },

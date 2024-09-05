@@ -1,34 +1,29 @@
-import { FC, Fragment, useState } from "react";
-import Uumark from "../../components/uumark/Uumark";
+import { FC, Fragment } from "react";
 import clsx from "clsx";
-import { IPayment, IType } from "../../types/types";
+import { IPayment } from "../../types/types";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import arrowWhiteIcon from "../../assets/images/icons/arrow-white.svg";
 import incomeIcon from "../../assets/images/icons/income.svg";
 import tulparIcon from "../../assets/images/icons/tulpar.svg";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
-import { paymentsAtom } from "../../store/store";
+import { isUumarkOpenAtom, paymentAtom } from "../../store/store";
+import { useProfile } from "../../hooks/queries/useProfile";
+import { useDistributePayments } from "../../hooks/useDistributePayments";
 
 const HistoryPage: FC = () => {
-  const [summ, setSumm] = useState(1000);
-  const [name, setName] = useState("Улан К");
-  const [phone, setPhone] = useState(755010965);
-  const [transportCode, setTransportCode] = useState(1517);
-  const [type, setType] = useState<IType>("");
-  const [isUumarkOpen, setIsUumarkOpen] = useState(false);
-  const [payments] = useAtom(paymentsAtom);
   const navigate = useNavigate();
+  const [_, setPayment] = useAtom(paymentAtom);
+  const [isUumarkOpen, setIsUumarkOpen] = useAtom(isUumarkOpenAtom);
+
+  const { data: profile } = useProfile();
 
   const onClickPayment = (data: IPayment) => {
-    setSumm(data.summ);
-    data.name && setName(data.name);
-    data.phone && setPhone(data.phone);
-    data.transportCode && setTransportCode(data.transportCode);
-    setType(data.type || "");
-
+    setPayment(data);
     setIsUumarkOpen(true);
   };
+
+  const payments = useDistributePayments(profile?.payments || []);
 
   return (
     <>
@@ -47,7 +42,7 @@ const HistoryPage: FC = () => {
           <span>Выбрать период</span>
           <img src={arrowWhiteIcon} alt="arrow-white" className="w-[10px]" />
         </button>
-        {payments.map((payment, key) => (
+        {payments?.map((payment, key) => (
           <div key={key}>
             <h2 className="mt-[15px] mb-[5px] pl-[10px] text-grey font-normal">
               {payment.date}
@@ -83,9 +78,19 @@ const HistoryPage: FC = () => {
                         </span>
                       </div>
                     </div>
-                    <span className="pt-10 whitespace-nowrap">
-                      {pm.summ},00{" "}
+                    <span
+                      className={clsx("pt-10 whitespace-nowrap text-center leading-[19px]", {
+                        "text-red": !pm.is_success,
+                      })}
+                    >
+                      {(pm.summ as unknown as string).replace(/\./, ",")}{" "}
                       <span className="underline text-[15px]">C</span>
+                      {!pm.is_success && (
+                        <>
+                          <br />
+                          <span className="text-[14px]">Отклонен</span>
+                        </>
+                      )}
                     </span>
                   </button>
                 </Fragment>
@@ -94,15 +99,6 @@ const HistoryPage: FC = () => {
           </div>
         ))}
       </div>
-      <Uumark
-        isOpen={isUumarkOpen}
-        close={() => setIsUumarkOpen(false)}
-        summState={[summ, setSumm]}
-        nameState={[name, setName]}
-        phoneState={[phone, setPhone]}
-        transportCodeState={[transportCode, setTransportCode]}
-        type={type}
-      />
     </>
   );
 };

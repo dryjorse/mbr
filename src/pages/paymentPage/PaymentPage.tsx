@@ -1,24 +1,26 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import processingIcon from "../../assets/images/icons/processing.svg";
 import { formatNumber } from "../../constants/utils";
 import repeatIcon from "../../assets/images/icons/repeat-white.svg";
 import timeIcon from "../../assets/images/icons/time.svg";
 import favouriteIcon from "../../assets/images/icons/favourite-white.svg";
 import { Link } from "react-router-dom";
-import Uumark from "../../components/uumark/Uumark";
 import clsx from "clsx";
 import { useAtom } from "jotai";
-import { paymentAtom } from "../../store/store";
+import { isUumarkOpenAtom, paymentAtom } from "../../store/store";
+import { usePay } from "../../hooks/queries/usePay";
 
 const PaymentPage: FC = () => {
-  const [isUumarkOpen, setIsUumarkOpen] = useState(false);
-  const [{ summ, phone, name, transportCode, type }] = useAtom(paymentAtom);
+  const [isUumarkOpen, setIsUumarkOpen] = useAtom(isUumarkOpenAtom);
+  const [payment] = useAtom(paymentAtom);
+
+  usePay();
 
   return (
     <>
       <div
         className={clsx(
-          "pt-[300px] h-screen flex flex-col justify-between items-center text-center trans-def",
+          "pt-[300px] h-[calc(100vh-14px)] flex flex-col justify-between items-center text-center trans-def",
           { "blur brightness-50": isUumarkOpen }
         )}
       >
@@ -30,7 +32,7 @@ const PaymentPage: FC = () => {
           />
           <h1 className="mt-[15px] mb-[5px] text-[26px]">Платеж в обработке</h1>
           <strong className="block text-[36px] font-extrabold leading-[34px]">
-            {formatNumber(summ, false)},00{" "}
+            {formatNumber(payment.summ, false)},00{" "}
             <span className="som text-[28px] font-black">C</span>
           </strong>
           <button
@@ -72,15 +74,6 @@ const PaymentPage: FC = () => {
           </Link>
         </div>
       </div>
-      <Uumark
-        isOpen={isUumarkOpen}
-        close={() => setIsUumarkOpen(false)}
-        summState={[summ]}
-        nameState={[name || ""]}
-        phoneState={[phone || 0]}
-        transportCodeState={[transportCode || 0]}
-        type={type}
-      />
     </>
   );
 };

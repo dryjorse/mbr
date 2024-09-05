@@ -40,6 +40,6 @@
     @apply underline font-bold;
   }
   .btn {
-    @apply rounded-[18px] py-[15px] bg-[#FEDD2C] w-full flex gap-[5px] justify-center text-black font-bold text-center;
+    @apply rounded-[18px] py-[15px] bg-[#FEDD2C] w-full flex gap-[5px] justify-center text-black font-bold text-center trans-def active:brightness-75 disabled:!bg-[#6B6C70] disabled:!text-white disabled:pointer-events-none;
   }
 }

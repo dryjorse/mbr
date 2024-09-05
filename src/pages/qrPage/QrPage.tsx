@@ -14,12 +14,6 @@ const QrPage: FC = () => {
   const [_, setQrMessage] = useAtom(qrMessageAtom);
   const navigate = useNavigate();
 
-  // console.log(
-  //   decodeURIComponent(
-  //     "%D0%90%D0%91%D0%94%D0%A3%D0%9B%D0%90%D0%97%D0%98%D0%9C%20%D0%9A."
-  //   )
-  // );
-
   useEffect(() => {
     const config = {
       fps: 10,
@@ -35,14 +29,36 @@ const QrPage: FC = () => {
     };
 
     const qrCodeSuccess = (decodedText: string) => {
-      const fullname = decodeURIComponent(decodedText.slice(83).split(".")[0]);
       if (decodedText.match(/app.mbank.kg/i)) {
+        const fullname = decodeURIComponent(
+          decodedText.slice(83).split(".")[0]
+        );
+
         setPayment({
           ...payment,
           phone: +decodedText.slice(70, 79),
-          name: `${capitalizeName(fullname.split(" ")[0])} ${
+          fullname: `${capitalizeName(fullname.split(" ")[0])} ${
             fullname.split(" ")[1]
           }.`,
+        });
+      } else if (decodedText.match(/pay.payqr.kg/i)) {
+        const fullname = decodeURIComponent(
+          decodedText.slice(79).split(".")[0]
+        );
+
+        setPayment({
+          ...payment,
+          phone: +decodedText.slice(66, 75),
+          fullname: `${capitalizeName(fullname.split(" ")[0])} ${
+            fullname.split(" ")[1]
+          }.`,
+        });
+      } else if (decodedText.match(/tulpar/i)) {
+        setPayment({
+          ...payment,
+          summ: 17,
+          type: "tulpar",
+          transport_code: +decodedText.replace(/tulpar/i, ""),
         });
       }
       setQrMessage(decodedText);

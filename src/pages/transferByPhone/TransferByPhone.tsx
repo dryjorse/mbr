@@ -56,7 +56,7 @@ const TransferByPhone: FC = () => {
       : contacts;
 
   const onClickContact = (fullname: string, phone: number) => {
-    setPayment({ ...payment, name: fullname, phone });
+    setPayment({ ...payment, fullname: fullname, phone, type: "transfer" });
   };
 
   return (
@@ -77,7 +77,7 @@ const TransferByPhone: FC = () => {
             type="text"
             className="bg-transparent"
             placeholder="Номер телефона или имя"
-            value={payment.phone || ""}
+            value={payment.phone || 0}
             onChange={({ target: { value } }) =>
               setPayment({ ...payment, phone: +value })
             }

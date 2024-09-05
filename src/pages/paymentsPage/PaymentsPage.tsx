@@ -141,8 +141,9 @@ const PaymentsPage: FC = () => {
             onClick={() => {
               setPayment({
                 ...payment,
-                name: contact.fullname,
+                fullname: contact.fullname,
                 phone: contact.tel,
+                type: "transfer",
               });
             }}
             key={contact.name}

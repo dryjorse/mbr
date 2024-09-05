@@ -1,5 +1,15 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { formatNumber, randomInteger } from "../../constants/utils";
+import { FC, useEffect, useState } from "react";
+import { formatNumber } from "../../constants/utils";
+import clsx from "clsx";
+import { useAtom } from "jotai";
+import {
+  isUumarkOpenAtom,
+  paymentAtom,
+  paymentStatusAtom,
+} from "../../store/store";
+import { useProfile } from "../../hooks/queries/useProfile";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import paymentsService from "../../services/payments.service";
 import logoIcon from "../../assets/images/icons/logo.webp";
 import crossIcon from "../../assets/images/icons/cross.svg";
 import markIcon from "../../assets/images/icons/mark.svg";
@@ -7,139 +17,108 @@ import borderIcon from "../../assets/images/icons/border.svg";
 import taskIcon from "../../assets/images/icons/task.svg";
 import repeatIcon from "../../assets/images/icons/repeat.svg";
 import favouriteIcon from "../../assets/images/icons/favourite.svg";
-import clsx from "clsx";
-import { IType } from "../../types/types";
-import { useAtom } from "jotai";
-import { paymentsAtom } from "../../store/store";
+import clockIcon from "../../assets/images/icons/clock.svg";
+import errorIcon from "../../assets/images/icons/error.svg";
+import { queryKeys } from "../../constants/api";
 
-interface Props {
-  isOpen: boolean;
-  close: () => void;
-  summState: [number, Dispatch<SetStateAction<number>>?];
-  nameState: [string, Dispatch<SetStateAction<string>>?];
-  phoneState: [number, Dispatch<SetStateAction<number>>?];
-  type?: IType;
-  transportCodeState?: [number, Dispatch<SetStateAction<number>>?];
-}
+const Uumark: FC = () => {
+  const queryClient = useQueryClient();
+  const { data: profile } = useProfile();
+  const [isOpen, setIsOpen] = useAtom(isUumarkOpenAtom);
+  const [payment, setPayment] = useAtom(paymentAtom);
+  const [status, setStatus] = useAtom(paymentStatusAtom);
+  const [statusClicks, setStatusClicks] = useState(0);
 
-const Uumark: FC<Props> = ({
-  isOpen,
-  close,
-  summState,
-  nameState,
-  phoneState,
-  type,
-  transportCodeState,
-}) => {
-  const [summ, setSumm] = summState;
-  const [name, setName] = nameState;
-  const [phone, setPhone] = phoneState;
-  const [transportCode, setTransportCode] = transportCodeState || [];
-  const [clicks, setClicks] = useState(0);
-  const [payments, setPayments] = useAtom(paymentsAtom);
+  const { mutate: toggleStatus, isPending } = useMutation({
+    mutationFn: paymentsService.toggleStatus,
+    onMutate: () => {
+      setStatus("loading");
+    },
+    onSuccess: ({ data }) => {
+      setPayment(data);
+      setStatus(data.is_success ? "success" : "error");
+      queryClient.prefetchQuery({ queryKey: [queryKeys.Profile] });
+    },
+  });
 
-  const date = new Date();
-  const currentDate = `${formatNumber(date.getDate())}.${formatNumber(
-    date.getMonth()
-  )}.${date.getFullYear()}, ${formatNumber(date.getHours())}:${formatNumber(
-    date.getMinutes()
-  )}`;
-
-  const getRandomRecipt = () => {
-    let result = "";
-
-    for (let i = 0; i < 9; i++) {
-      result += randomInteger(0, 9);
+  const onClickStatus = () => {
+    if (statusClicks >= 3) {
+      setStatusClicks(0);
+      toggleStatus({ id: payment.id, is_success: !payment.is_success });
+    } else {
+      setStatusClicks((prev) => prev + 1);
     }
-
-    return `P0815${result}`;
   };
 
-  const onClickSecr = () => {
-    setClicks((prev) => prev + 1);
+  const formatDate = (dateStr: Date) => {
+    const date = new Date(dateStr);
 
-    if (clicks >= 3) {
-      let newSumm: number = 0;
-      let newName: string = "";
-      let newPhone: number = 0;
-      let newTransportCode: number = 0;
+    const formattedDate = date.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
 
-      if (type === "tulpar") {
-        while (!newTransportCode) {
-          newTransportCode = +(prompt("Введите код транспорта") || 0);
-        }
-      } else {
-        while (!newPhone) {
-          newPhone = +(prompt("Введите номер телефона") || 0);
-        }
-        while (!newName) {
-          newName = prompt("Введите имя") || "";
-        }
-      }
+    const formattedTime = date.toLocaleTimeString("ru-RU", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-      while (!newSumm) {
-        newSumm = +(prompt("Введите сумму") || 0);
-      }
-
-      setSumm?.(newSumm);
-      setName?.(newName);
-      setPhone?.(newPhone);
-      setTransportCode?.(newTransportCode);
-
-      setPayments([
-        {
-          date: "Сегодня",
-          payments: [
-            {
-              name: newName,
-              summ: newSumm,
-              phone: newPhone,
-              transportCode: newTransportCode,
-              type: type,
-            },
-            ...(payments.find(({ date }) => date === "Сегодня")?.payments ||
-              []),
-          ],
-        },
-        ...payments.filter(({ date }) => date !== "Сегодня"),
-      ]);
-    }
+    return `${formattedDate}, ${formattedTime}`;
   };
 
   return (
     <div
       className={clsx(
-        "fixed top-0 bottom-0 left-0 right-0 px-[7px] flex justify-center items-center flex-col trans-def",
+        "fixed top-0 bottom-0 left-0 right-0 px-[7px] flex justify-center items-center flex-col trans-def z-50",
         { "opacity-0 pointer-events-none": !isOpen }
       )}
     >
-      <button
-        onClick={onClickSecr}
-        className="fixed top-0 right-0 w-[200px] h-[70px] z-50"
-      ></button>
       <div className="rounded-[24px] p-20 w-full bg-gray">
         <div className="flex justify-between items-center">
           <img src={logoIcon} alt="logo" className="w-[80px]" />
-          <button onClick={close}>
+
+          <button onClick={() => setIsOpen(false)}>
             <img src={crossIcon} alt="cross" className="w-[26px]" />
           </button>
         </div>
-        <img
-          src={markIcon}
-          alt="mark"
-          className="mt-30 mb-20 mx-auto block w-[70px]"
-        />
-        <h1 className="text-[21px] text-center text-green">
-          Транзакция успешно проведена
+        <button
+          disabled={isPending}
+          onClick={onClickStatus}
+          className="mt-30 mb-20 mx-auto block"
+        >
+          <img
+            alt="mark"
+            src={
+              status === "loading"
+                ? clockIcon
+                : payment.is_success
+                ? markIcon
+                : errorIcon
+            }
+            className=" w-[65px]"
+          />
+        </button>
+        <h1
+          className={clsx("text-[21px] text-center text-green", {
+            "!text-orange": status === "loading",
+            "!text-red": !payment.is_success,
+          })}
+        >
+          {status === "loading"
+            ? "Платеж в обработке"
+            : payment.is_success
+            ? "Транзакция успешно проведена"
+            : "Платеж отклонен"}
         </h1>
-        <h2 className="mt-20 text-[24px] text-center flex justify-center items-center">
-          - {formatNumber(summ)},00{" "}
+        <h2 className="mt-10 text-[24px] text-center flex justify-center items-center">
+          - {formatNumber(+payment.summ)},00{" "}
           <span className="block underline text-[21px] ml-[6px] font-black">
             C
           </span>
         </h2>
         <h3 className="text-center text-grey text-[17px]">
-          {type === "tulpar"
+          {payment.type === "tulpar"
             ? "Тулпар - оплата за проезд"
             : "Перевод по номеру телефона"}
         </h3>
@@ -147,39 +126,43 @@ const Uumark: FC<Props> = ({
         <div className="my-[7px] flex justify-between items-center text-[15px]">
           <span className="text-grey">Имя получателя</span>
           <span className="text-end flex-[0_1_200px]">
-            {type === "tulpar" ? "CASH OUT ТУЛПАР ОПЛАТА ЗА ПРОЕЗД" : name}
+            {payment.type === "tulpar"
+              ? "CASH OUT ТУЛПАР ОПЛАТА ЗА ПРОЕЗД"
+              : payment.fullname}
           </span>
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Оплачено со счета</span>
-          <span>1030120546212789</span>
+          <span>{profile?.account}</span>
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Дата операции</span>
-          <span>{currentDate}</span>
+          <span>{formatDate(payment.created_at)}</span>
         </div>
-        <div className="my-[7px] flex justify-between text-[15px]">
-          <span className="text-grey">Номер квитанции</span>
-          <span>{getRandomRecipt()}</span>
-        </div>
-        {type === "tulpar" && (
+        {status !== "loading" && (
+          <div className="my-[7px] flex justify-between text-[15px]">
+            <span className="text-grey">Номер квитанции</span>
+            <span>{payment.receipt_number}</span>
+          </div>
+        )}
+        {payment.type === "tulpar" && (
           <div className="my-[10px] flex justify-between text-[15px]">
             <span className="text-grey">Код транспорта</span>
-            <span>{transportCode}</span>
+            <span>{payment.transport_code}</span>
           </div>
         )}
         <img src={borderIcon} alt="border" className="w-full my-10" />
         <p className="text-start text-[15px] text-grey">
-          {type === "tulpar" ? (
-            `Оплата услуг: Получатель: Тулпар - оплата за проезд. ${transportCode}/${summ}.00`
+          {payment.type === "tulpar" ? (
+            `Оплата услуг: Получатель: Тулпар - оплата за проезд. ${payment.transport_code}/${payment.summ}.00`
           ) : (
             <>
-              Перевод по номеру телефона. 996{phone}/
+              Перевод по номеру телефона. 996{payment.phone}/
               <br />
-              {name.replace(/\./g, "")} ./ /
+              {payment.fullname?.replace(/\./g, "")}./ /
             </>
           )}{" "}
-          Сумма <span className="summ">{formatNumber(summ)}</span>
+          Сумма <span className="summ">{formatNumber(+payment.summ)}</span>
           .00 KGS
         </p>
       </div>

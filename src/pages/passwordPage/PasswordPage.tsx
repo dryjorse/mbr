@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { isPasswordEnteredAtom } from "../../store/store";
+import { useProfile } from "../../hooks/queries/useProfile";
 
 const PasswordPage: FC = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [_, setIsPasswordEntered] = useAtom(isPasswordEnteredAtom);
+  const { data: profile } = useProfile();
 
   const onClickNumber = (number: number) => {
     password.length < 4 && setPassword((prev) => prev + number);
@@ -68,9 +70,9 @@ const PasswordPage: FC = () => {
   };
 
   return (
-    <div className="h-screen pt-[170px] flex flex-col justify-between text-center">
+    <div className="h-[calc(100vh-14px)] pt-[170px] flex flex-col justify-between text-center">
       <div>
-        <h1 className="text-[16px]">Абдулазим</h1>
+        <h1 className="text-[16px]">{profile?.username.split(" ")[0]}</h1>
         <div
           className={clsx(
             "mt-[23px] mx-auto max-w-[140px] flex justify-between items-center trans-def",
@@ -89,7 +91,8 @@ const PasswordPage: FC = () => {
                 {
                   "bg-green border-green !w-[18px] !h-[18px]":
                     password.length >= key + 1,
-                  "!border-red !bg-red": password.length >= 4 && password !== "9999",
+                  "!border-red !bg-red":
+                    password.length >= 4 && password !== "9999",
                 }
               )}
             ></motion.div>

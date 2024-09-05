@@ -12,6 +12,7 @@ const colors = {
   transparent: twColors.transparent,
   red: "#E34C4A",
   yellow: "#FABF01",
+  orange: "#F87017",
 };
 
 export default {
