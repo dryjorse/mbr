@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { formatNumber } from "../../constants/utils";
 import clsx from "clsx";
 import { useAtom } from "jotai";
