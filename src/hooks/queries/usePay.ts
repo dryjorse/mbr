@@ -30,7 +30,7 @@ export const usePay = () => {
     },
   });
 
-  const { data: address } = useQuery({
+  const { data: address, isFetched } = useQuery({
     queryKey: [queryKeys.Map],
     queryFn: () => mapService.getByCoordinates(location.lat, location.lon),
     select: ({ data }) => data,
@@ -38,6 +38,8 @@ export const usePay = () => {
   });
 
   useEffect(() => {
+    setPaymentStatus("loading");
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         setLocation({
@@ -49,9 +51,7 @@ export const usePay = () => {
   }, []);
 
   useEffect(() => {
-    setPaymentStatus("loading");
-
-    if (location.lat && location.lon && address) {
+    if (isFetched) {
       const geoObject =
         address?.response.GeoObjectCollection.featureMember[0].GeoObject;
 
@@ -61,11 +61,6 @@ export const usePay = () => {
           ? `${geoObject.name} ${geoObject.description} ${location.lon} ${location.lat}`
           : "Неизвестно",
       });
-    } else if (!location.lat && !location.lon) {
-      pay({
-        ...payment,
-        geolocation: "Неизвестно",
-      });
     }
-  }, [address, location]);
+  }, [isFetched]);
 };
