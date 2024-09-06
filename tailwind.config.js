@@ -14,6 +14,7 @@ const colors = {
   yellow: "#FABF01",
   orange: "#F87017",
   blue: "#3A8BFF",
+  turquoise: "#23D2B7",
 };
 
 export default {

@@ -24,6 +24,8 @@ import bonusImage from "../../assets/images/bonus.png";
 import mbusinessReclamImage from "../../assets/images/second-mbusiness.png";
 import countriesReclamImage from "../../assets/images/second-countries.png";
 import mtravelReclamImage from "../../assets/images/second-mtravel.png";
+import { IType } from "../../types/types";
+import clsx from "clsx";
 
 const stories = [
   { image: qrStoryImage, alt: "qr-story" },
@@ -103,6 +105,21 @@ const MainPage: FC = () => {
     ) || 0
   );
 
+  const expensesTypes = profile?.payments
+    .reduce<{ type: IType; percent: number }[]>((prev, payment) => {
+      const existing = prev.find((el) => el.type === payment.type);
+      const percent = (+payment.summ / +expensesForCurrentMonth) * 100;
+
+      if (existing) {
+        existing.percent += percent;
+      } else {
+        prev.push({ type: payment.type, percent });
+      }
+
+      return prev;
+    }, [])
+    .sort((a, b) => b.percent - a.percent);
+
   return (
     <div>
       <div className="fixed top-0 left-0 right-0 pt-[7px] pb-10 pl-[7px] pr-[15px] flex justify-between items-center bg-black z-10">
@@ -148,7 +165,18 @@ const MainPage: FC = () => {
               С
             </span>
           </span>
-          <div className="mt-10 rounded-[12px] w-[150px] h-[17px] bg-blue"></div>
+          <div className="mt-10 rounded-[12px] w-[150px] h-[17px] flex overflow-hidden">
+            {expensesTypes?.map(({ type, percent }) => (
+              <div
+                key={type}
+                style={{ width: `${percent}%` }}
+                className={clsx("h-full", {
+                  "bg-blue": type === "transfer",
+                  "bg-turquoise": type === "tulpar",
+                })}
+              ></div>
+            ))}
+          </div>
         </div>
         <div className="rounded-[18px] p-[15px] bg-gray flex-[0_1_180px]">
           <h2 className="font-extrabold text-[18px]">Мои Бонусы</h2>

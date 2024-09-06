@@ -17,8 +17,13 @@ const TransferByPhoneTwo: FC = () => {
   const [payment, setPayment] = useAtom(paymentAtom);
   const [qrMessage] = useAtom(qrMessageAtom);
   const { data: profile } = useProfile();
+  const [summ, setSumm] = useState(0);
 
   const isEnoughMoney = payment.summ <= (profile?.balance || 0);
+
+  const onConfirm = () => {
+    setPayment({ ...payment, summ });
+  };
 
   return (
     <div>
@@ -91,12 +96,10 @@ const TransferByPhoneTwo: FC = () => {
         <div className="flex text-[26px] font-bold">
           <input
             type="number"
-            style={{ width: (payment.summ + "").length * 16 }}
+            style={{ width: (summ + "").length * 16 }}
             placeholder="0"
-            value={payment.summ || ""}
-            onChange={({ target: { value } }) =>
-              setPayment({ ...payment, summ: +value })
-            }
+            value={summ || ""}
+            onChange={({ target: { value } }) => setSumm(+value)}
             className="rounded-none p-0 bg-transparent w-[19px] placeholder:text-[#6B6C70]"
           />
           <span className="ml-[5px] som text-[22px] text-[#6B6C70] font-extrabold">
@@ -168,16 +171,16 @@ const TransferByPhoneTwo: FC = () => {
         </>
       )}
       <Link
+        onClick={onConfirm}
         to={isEnoughMoney ? "/confirm-transfer" : "/transfer-by-phone2"}
         className={clsx("btn", {
-          "!bg-[#6B6C70] !text-white pointer-events-none": !payment.summ,
+          "!bg-[#6B6C70] !text-white pointer-events-none": !summ,
         })}
       >
         Перевести{" "}
-        {!!payment.summ && (
+        {!!summ && (
           <>
-            {payment.summ},00{" "}
-            <span className="som block mt-[-6px] text-[20px]">c</span>
+            {summ},00 <span className="som block mt-[-6px] text-[20px]">c</span>
           </>
         )}
       </Link>
