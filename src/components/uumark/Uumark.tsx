@@ -169,7 +169,7 @@ const Uumark: FC = () => {
         <p className="text-start text-[15px] text-grey">
           {payment.type === "tulpar" ? (
             `Оплата услуг: Получатель: Тулпар - оплата за проезд. ${payment.transport_code}/${payment.summ}.00`
-          ) : payment.fullname === "Global" ? <>QR/Global/{formattedDate}<br/>/MKSA_S_c115b5b9-fa0e-406e-9bb9-e67fe48d0470/QR_452</> : (
+          ) : payment.fullname === "Global" ? <>QR/Global/{formattedDate}/<br/>MKSA_S_c115b5b9-fa0e-406e-9bb9-e67fe48d0470/QR_452</> : (
             <>
               Перевод по номеру телефона. 996{payment.phone}/
               <br />
