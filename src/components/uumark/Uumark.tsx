@@ -67,6 +67,20 @@ const Uumark: FC = () => {
     return `${formattedDate}, ${formattedTime}`;
   };
 
+  const padZero = (num) => (num < 10 ? `0${num}` : num);
+
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = padZero(now.getMonth() + 1); // Месяцы начинаются с 0
+  const day = padZero(now.getDate());
+
+  const hours = padZero(now.getHours());
+  const minutes = padZero(now.getMinutes());
+  const seconds = padZero(now.getSeconds());
+
+  const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
   return (
     <div
       className={clsx(
@@ -155,7 +169,7 @@ const Uumark: FC = () => {
         <p className="text-start text-[15px] text-grey">
           {payment.type === "tulpar" ? (
             `Оплата услуг: Получатель: Тулпар - оплата за проезд. ${payment.transport_code}/${payment.summ}.00`
-          ) : (
+          ) payment.fullname === "Global" ? `QR/Global/${formattedDate}/MKSA_S_c115b5b9-fa0e-406e-9bb9-e67fe48d0470/QR_452`: (
             <>
               Перевод по номеру телефона. 996{payment.phone}/
               <br />
