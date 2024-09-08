@@ -67,7 +67,7 @@ const Uumark: FC = () => {
     return `${formattedDate}, ${formattedTime}`;
   };
 
-  const padZero = (num: numner) => (num < 10 ? `0${num}` : num);
+  const padZero = (num: number) => (num < 10 ? `0${num}` : num);
 
   const now = new Date();
 
