@@ -176,8 +176,8 @@ const Uumark: FC = () => {
               {payment.fullname?.replace(/\./g, "")}./ /
             </>
           )}{" "}
-          Сумма <span className="summ">{formatNumber(+payment.summ)}</span>
-          .00 KGS
+          {payment.fullname !== "Global" && <>Сумма <span className="summ">{formatNumber(+payment.summ)}</span>
+          .00 KGS</>}
         </p>
       </div>
       <div className="mt-30 px-10 w-full flex justify-between items-start leading-[21px]">
