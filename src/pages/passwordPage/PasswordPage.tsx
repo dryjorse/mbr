@@ -6,20 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import { isPasswordEnteredAtom } from "../../store/store";
 import { useProfile } from "../../hooks/queries/useProfile";
+import Cookies from "js-cookie";
 
 const PasswordPage: FC = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [_, setIsPasswordEntered] = useAtom(isPasswordEnteredAtom);
   const { data: profile } = useProfile();
-
-  const onClickNumber = (number: number) => {
-    password.length < 4 && setPassword((prev) => prev + number);
-  };
-
-  const onClickDelete = () => {
-    setPassword((prev) => prev.slice(0, -1));
-  };
 
   useEffect(() => {
     let timeout: number;
@@ -37,6 +30,20 @@ const PasswordPage: FC = () => {
       clearTimeout(timeout);
     };
   }, [password]);
+
+  const onClickNumber = (number: number) => {
+    password.length < 4 && setPassword((prev) => prev + number);
+  };
+
+  const onClickDelete = () => {
+    setPassword((prev) => prev.slice(0, -1));
+  };
+
+  const onClickExit = () => {
+    Cookies.remove("mbr-refresh-token");
+    localStorage.removeItem("mbr-access-token");
+    navigate("/auth");
+  };
 
   const variants = {
     even: {
@@ -109,7 +116,7 @@ const PasswordPage: FC = () => {
             {key + 1}
           </button>
         ))}
-        <button>Выйти</button>
+        <button onClick={onClickExit}>Выйти</button>
         <button
           onClick={() => onClickNumber(0)}
           className="rounded-circle bg-gray w-[80px] h-[80px] text-[24px] font-bold"
