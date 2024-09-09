@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
-import { isPasswordEnteredAtom } from "../../store/store";
+import { isAuthAtom, isPasswordEnteredAtom } from "../../store/store";
 import { useProfile } from "../../hooks/queries/useProfile";
 import Cookies from "js-cookie";
 
@@ -12,6 +12,7 @@ const PasswordPage: FC = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [_, setIsPasswordEntered] = useAtom(isPasswordEnteredAtom);
+  const [__, setIsAuth] = useAtom(isAuthAtom);
   const { data: profile } = useProfile();
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const PasswordPage: FC = () => {
   const onClickExit = () => {
     Cookies.remove("mbr-refresh-token");
     localStorage.removeItem("mbr-access-token");
-    navigate("/auth");
+    setIsAuth(false);
   };
 
   const variants = {
