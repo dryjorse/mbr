@@ -108,7 +108,8 @@ const MainPage: FC = () => {
   const expensesTypes = profile?.payments
     .reduce<{ type: IType; percent: number }[]>((prev, payment) => {
       const existing = prev.find((el) => el.type === payment.type);
-      const percent = (+payment.summ / +expensesForCurrentMonth) * 100;
+      const percent =
+        (+payment.summ / +expensesForCurrentMonth.replace(/ /, "")) * 100;
 
       if (existing) {
         existing.percent += percent;
