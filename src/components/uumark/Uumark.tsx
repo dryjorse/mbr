@@ -87,6 +87,7 @@ const Uumark: FC = () => {
     return `${integer},${formattedDecimal}`;
   }
 
+
   return (
     <div
       className={clsx(
@@ -135,7 +136,7 @@ const Uumark: FC = () => {
           -{" "}
           {payment.type === "o-dengi" ? (
             // @ts-ignore
-            formatNumber(formatNum(payment.summ + (payment.summ * 1) / 100))
+            formatNumber(formatNum(+payment.summ + (+payment.summ * 1) / 100))
           ) : (
             <>{formatNumber(+payment.summ)},00 </>
           )}
@@ -211,7 +212,7 @@ const Uumark: FC = () => {
             </>
           ) : payment.type === "o-dengi" ? (
             `Оплата услуг. Получатель: Перевод по QR. SQBDbFFkOykyt60rRve5MGLAyhDcC70f/
-          ${payment.phone}/O!Den'gi - ${payment.fullname}./${payment.summ},00`
+          996${payment.phone}/O!Den'gi - ${payment.fullname}./${payment.summ}`
           ) : (
             <>
               Перевод по номеру телефона. 996{payment.phone}/
