@@ -48,3 +48,5 @@ export const getCurrentMonth = () =>
     "Ноябрь",
     "Декабрь",
   ][new Date().getMonth()];
+
+export const calcPercents = (percent: number, number: number) => (percent * number) / 100;

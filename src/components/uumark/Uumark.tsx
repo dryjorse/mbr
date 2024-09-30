@@ -81,6 +81,12 @@ const Uumark: FC = () => {
 
   const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
+  function formatNum(num: number) {
+    const [integer, decimal] = num.toString().split(".");
+    const formattedDecimal = (decimal || "00").padStart(2, "0").slice(0, 2);
+    return `${integer},${formattedDecimal}`;
+  }
+
   return (
     <div
       className={clsx(
@@ -126,7 +132,13 @@ const Uumark: FC = () => {
             : "Платеж отклонен"}
         </h1>
         <h2 className="mt-10 text-[24px] text-center flex justify-center items-center">
-          - {formatNumber(+payment.summ)},00{" "}
+          -{" "}
+          {payment.type === "o-dengi" ? (
+            // @ts-ignore
+            formatNumber(formatNum(payment.summ + (payment.summ * 1) / 100))
+          ) : (
+            <>{formatNumber(+payment.summ)},00 </>
+          )}
           <span className="block underline text-[21px] ml-[6px] font-black">
             C
           </span>
@@ -134,14 +146,22 @@ const Uumark: FC = () => {
         <h3 className="text-center text-grey text-[17px]">
           {payment.type === "tulpar"
             ? "Тулпар - оплата за проезд"
+            : payment.type === "o-dengi"
+            ? "Перевод по QR"
             : "Перевод по номеру телефона"}
         </h3>
         <img src={borderIcon} alt="border" className="w-full my-10" />
         <div className="my-[7px] flex justify-between items-center text-[15px]">
           <span className="text-grey">Имя получателя</span>
-          <span className="text-end flex-[0_1_200px]">
+          <span
+            className={clsx("text-end flex-[0_1_200px]", {
+              "flex-[0_1_150px]": payment.type === "o-dengi",
+            })}
+          >
             {payment.type === "tulpar"
               ? "CASH OUT ТУЛПАР ОПЛАТА ЗА ПРОЕЗД"
+              : payment.type === "o-dengi"
+              ? "ОПЛАТА ПО ЕДИНОМУ QR (КЭШАУТ) МПЦ"
               : payment.fullname}
           </span>
         </div>
@@ -149,6 +169,15 @@ const Uumark: FC = () => {
           <span className="text-grey">Оплачено со счета</span>
           <span>{profile?.account}</span>
         </div>
+        {payment.type === "o-dengi" && (
+          <div className="my-[7px] flex justify-between text-[15px]">
+            <span className="text-grey">Комиссия</span>
+            <span>
+              {formatNum(0 + (payment.summ * 1) / 100)}
+              <span className="som uppercase ml-[5px] font-normal">c</span>
+            </span>
+          </div>
+        )}
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Дата операции</span>
           <span>{formatDate(payment.created_at)}</span>
@@ -157,6 +186,12 @@ const Uumark: FC = () => {
           <div className="my-[7px] flex justify-between text-[15px]">
             <span className="text-grey">Номер квитанции</span>
             <span>{payment.receipt_number}</span>
+          </div>
+        )}
+        {payment.type === "o-dengi" && (
+          <div className="my-[7px] flex justify-between text-[15px]">
+            <span className="text-grey">Получатель</span>
+            <span>{payment.fullname}</span>
           </div>
         )}
         {payment.type === "tulpar" && (
@@ -174,6 +209,9 @@ const Uumark: FC = () => {
               QR/Global/{formattedDate}/<br />
               MKSA_S_c115b5b9-fa0e-406e-9bb9-e67fe48d0470/QR_452
             </>
+          ) : payment.type === "o-dengi" ? (
+            `Оплата услуг. Получатель: Перевод по QR. SQBDbFFkOykyt60rRve5MGLAyhDcC70f/
+          ${payment.phone}/O!Den'gi - ${payment.fullname}./${payment.summ},00`
           ) : (
             <>
               Перевод по номеру телефона. 996{payment.phone}/
@@ -183,6 +221,7 @@ const Uumark: FC = () => {
           )}{" "}
           {payment.fullname !== "Global" && (
             <>
+              <br />
               Сумма <span className="summ">{formatNumber(+payment.summ)}</span>
               .00 KGS
             </>

@@ -13,8 +13,7 @@ const Provider: FC<PropsWithChildren> = ({ children }) => {
   ) : !isPasswordEntered &&
     !pathname.match(/password/i) &&
     !pathname.match(/auth/i) ? (
-    // <Navigate to="/password" />
-    children
+    <Navigate to="/password" />
   ) : (
     children
   );

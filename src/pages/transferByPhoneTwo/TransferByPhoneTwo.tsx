@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { formatNumber, formatPhone } from "../../constants/utils";
+import { calcPercents, formatNumber, formatPhone } from "../../constants/utils";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import somIcon from "../../assets/images/icons/som.svg";
 import profileIcon from "../../assets/images/icons/profile.svg";
@@ -72,7 +72,7 @@ const TransferByPhoneTwo: FC = () => {
           <div className="flex flex-col">
             {payment.type === "tulpar" ? (
               <span className="text-grey leading-[16px]">Код транспорта</span>
-            ) : (
+            ) : payment.type === "transfer" ? (
               <input
                 value={payment.fullname}
                 className="rounded-none text-grey leading-[16px] bg-transparent p-0"
@@ -80,10 +80,18 @@ const TransferByPhoneTwo: FC = () => {
                   setPayment({ ...payment, fullname: value })
                 }
               />
+            ) : (
+              payment.type === "o-dengi" && (
+                <span className="mb-[4px] rounded-none text-grey leading-[16px] bg-transparent p-0">
+                  Реквизит
+                </span>
+              )
             )}
             <strong>
               {payment.type === "tulpar"
                 ? qrMessage.replace(/tulpar/i, "")
+                : payment.type === "o-dengi"
+                ? payment.phone
                 : `996 ${formatPhone(payment.phone || 0)}`}
             </strong>
           </div>
@@ -92,6 +100,18 @@ const TransferByPhoneTwo: FC = () => {
           <strong className="som text-grey text-[21px]">C</strong>
         )}
       </div>
+      {payment.type === "o-dengi" && (
+        <div className="rounded-[18px] mt-[15px] p-[15px] bg-gray flex justify-between items-center">
+          <div className="flex gap-[13px] items-center">
+            <div className="flex flex-col">
+              <span className="mb-[3px] rounded-none text-grey leading-[16px] bg-transparent p-0">
+                Услуга
+              </span>
+              <span>O!Den'gi - {payment.fullname}</span>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="my-[15px] rounded-[18px] p-[15px] flex flex-col items-center bg-gray">
         <div className="flex text-[26px] font-bold">
           <input
@@ -113,7 +133,11 @@ const TransferByPhoneTwo: FC = () => {
         >
           {isEnoughMoney ? (
             <>
-              Коммиссия 0,00 <strong className="som">C</strong>
+              Коммиссия{" "}
+              {payment.type === "o-dengi"
+                ? (calcPercents(1, summ) + "").replace(/\./, ",")
+                : "0,00"}{" "}
+              <strong className="som">C</strong>
             </>
           ) : (
             "Недостаточно средств"
@@ -180,7 +204,10 @@ const TransferByPhoneTwo: FC = () => {
         Перевести{" "}
         {!!summ && (
           <>
-            {summ},00 <span className="som block mt-[-6px] text-[20px]">c</span>
+            {payment.type === "o-dengi"
+              ? (summ + calcPercents(1, summ) + "").replace(/\./, ",")
+              : `${summ},00`}{" "}
+            <span className="som block mt-[-6px] text-[20px]">c</span>
           </>
         )}
       </Link>

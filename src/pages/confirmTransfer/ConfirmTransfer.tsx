@@ -20,6 +20,9 @@ const ConfirmTransfer: FC = () => {
     console.log(position);
   });
 
+  const paymentType = payment.type === "o-dengi" ? "платеж" : "перевод";
+  console.log(payment)
+
   return (
     <div className="h-[calc(100vh-14px)] flex flex-col justify-between">
       <div>
@@ -31,6 +34,7 @@ const ConfirmTransfer: FC = () => {
             Подтвердждение {payment.type === "tulpar" ? "платежа" : "перевода"}
           </h1>
         </div>
+
         <div className="relative mt-20 mb-[15px] rounded-[18px] p-[15px] flex gap-[13px] items-center bg-gray">
           <img src={somIcon} alt="som" className="w-[40px]" />
           <div className="flex flex-col text-grey">
@@ -53,40 +57,65 @@ const ConfirmTransfer: FC = () => {
             </div>
           )}
         </div>
-        <div className="rounded-[18px] p-[15px] bg-gray flex justify-between items-center">
-          <div className="flex gap-[13px] items-center">
-            <div className="rounded-circle w-[40px] h-[40px] flex justify-center items-center bg-[#272729]">
-              <img
-                src={payment.type === "tulpar" ? tulparIcon : profileIcon}
-                alt="profile"
-                className={clsx("w-[15px]", {
-                  "!w-full": payment.type === "tulpar",
-                })}
-              />
-            </div>
-            <div className="flex flex-col">
-              {payment.type === "tulpar" ? (
-                <span className="text-grey leading-[16px]">Услуга</span>
-              ) : (
-                <input
-                  value={payment.fullname}
-                  className="rounded-none text-grey leading-[16px] bg-transparent p-0"
-                  onChange={({ target: { value } }) =>
-                    setPayment({ ...payment, fullname: value })
-                  }
-                />
-              )}
-              <strong>
-                {payment.type === "tulpar"
-                  ? "Тулпар - оплата за проезд"
-                  : `996 ${formatPhone(payment.phone || 0)}`}
-              </strong>
+        {payment.type === "o-dengi" && (
+          <div className="rounded-[18px] my-[15px] p-[15px] bg-gray flex justify-between items-center">
+            <div className="flex gap-[13px] items-center">
+              <div className="flex flex-col">
+                <span className="rounded-none text-grey leading-[16px] bg-transparent p-0 text-14">
+                  Услуга
+                </span>
+                <span>Перевод по QR</span>
+              </div>
             </div>
           </div>
-          {payment.type === "transfer" && (
-            <strong className="som text-grey text-[21px]">C</strong>
-          )}
-        </div>
+        )}
+        {payment.type !== "o-dengi" && (
+          <div className="rounded-[18px] p-[15px] bg-gray flex justify-between items-center">
+            <div className="flex gap-[13px] items-center">
+              <div className="rounded-circle w-[40px] h-[40px] flex justify-center items-center bg-[#272729]">
+                <img
+                  src={payment.type === "tulpar" ? tulparIcon : profileIcon}
+                  alt="profile"
+                  className={clsx("w-[15px]", {
+                    "!w-full": payment.type === "tulpar",
+                  })}
+                />
+              </div>
+              <div className="flex flex-col">
+                {payment.type === "tulpar" ? (
+                  <span className="text-grey leading-[16px]">Услуга</span>
+                ) : (
+                  <input
+                    value={payment.fullname}
+                    className="rounded-none text-grey leading-[16px] bg-transparent p-0"
+                    onChange={({ target: { value } }) =>
+                      setPayment({ ...payment, fullname: value })
+                    }
+                  />
+                )}
+                <strong>
+                  {payment.type === "tulpar"
+                    ? "Тулпар - оплата за проезд"
+                    : `996 ${formatPhone(payment.phone || 0)}`}
+                </strong>
+              </div>
+            </div>
+            {payment.type === "transfer" && (
+              <strong className="som text-grey text-[21px]">C</strong>
+            )}
+          </div>
+        )}
+        {payment.type === "o-dengi" && (
+          <div className="my-[15px] rounded-[18px] p-[15px] bg-gray">
+            <h3 className="text-[18px]">Реквизиты</h3>
+            <div className="mt-[12px] flex flex-col">
+              <span className="rounded-none text-grey leading-[16px] bg-transparent p-0 text-14">
+                Получатель
+              </span>
+              <span>{payment.fullname}</span>
+            </div>
+          </div>
+        )}
         {payment.type === "tulpar" && (
           <div className="mt-[25px] mb-[15px] rounded-[18px] p-[15px] bg-gray">
             <h2 className="mb-10">Реквизиты</h2>
@@ -99,11 +128,11 @@ const ConfirmTransfer: FC = () => {
         <div
           className={clsx(
             "mt-[25px] mb-[15px] rounded-[18px] p-[15px] bg-gray",
-            { "!mt-0": payment.type === "tulpar" }
+            { "!mt-0": payment.type === "tulpar" || payment.type === "o-dengi" }
           )}
         >
           <div className="flex justify-between items-center">
-            <span className="text-grey">Сумма перевода</span>
+            <span className="text-grey">Сумма {paymentType}а</span>
             <span>
               {payment.summ},00 <span className="som text-[14px]">C</span>
             </span>
@@ -141,7 +170,7 @@ const ConfirmTransfer: FC = () => {
           to="/payments"
           className="mt-30 block text-center text-red font-bold"
         >
-          Отменить перевод
+          Отменить {paymentType}
         </Link>
       </div>
     </div>

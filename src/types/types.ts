@@ -1,4 +1,4 @@
-export type IType = "transfer" | "tulpar";
+export type IType = "transfer" | "tulpar" | "o-dengi";
 export interface IPayment {
   id: number;
   type: IType;

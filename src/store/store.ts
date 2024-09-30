@@ -4,12 +4,14 @@ import { IPayment, PaymentStatusType } from "../types/types";
 export const isUumarkOpenAtom = atom(false);
 export const paymentAtom = atom<IPayment>({
   id: 0,
-  type: "transfer",
+  type: "o-dengi",
   summ: 0,
   geolocation: "",
   receipt_number: "",
   is_success: true,
   created_at: new Date(),
+  phone: 9967034531,
+  fullname: "Эржан Ж."
 });
 export const isPasswordEnteredAtom = atom(false);
 export const qrMessageAtom = atom("");

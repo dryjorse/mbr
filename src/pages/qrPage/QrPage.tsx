@@ -60,6 +60,13 @@ const QrPage: FC = () => {
           type: "tulpar",
           transport_code: +decodedText.replace(/tulpar/i, ""),
         });
+      } else if (decodedText.match(/api.dengi.o.kg/i)) {
+        setPayment({
+          ...payment,
+          type: "o-dengi",
+          fullname: decodeURIComponent(decodedText.slice(112).split(".")[0]),
+          phone: +decodedText.slice(87, 96),
+        });
       }
       setQrMessage(decodedText);
       setIsEnabled(false);
