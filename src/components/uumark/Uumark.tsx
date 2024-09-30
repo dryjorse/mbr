@@ -222,7 +222,6 @@ const Uumark: FC = () => {
           )}{" "}
           {payment.fullname !== "Global" && (
             <>
-              <br />
               Сумма <span className="summ">{formatNumber(+payment.summ)}</span>
               .00 KGS
             </>
