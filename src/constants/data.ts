@@ -17,6 +17,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "150.00",
     fullname: "Улан К.",
     phone: 220637742,
+    users: [0],
   },
   {
     id: 0,
@@ -28,6 +29,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "300.00",
     fullname: "Абдуннур А.",
     phone: 228903050,
+    users: [0],
   },
   {
     id: 0,
@@ -39,6 +41,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "75.00",
     fullname: "Эржан Ж.",
     phone: 706309316,
+    users: [0],
   },
   {
     id: 0,
@@ -49,6 +52,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "17.00",
     type: "tulpar",
     transport_code: 1517,
+    users: [0],
   },
   {
     id: 0,
@@ -60,6 +64,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "560.00",
     fullname: "Наргуль Б.",
     phone: 505851080,
+    users: [0],
   },
   {
     id: 0,
@@ -70,6 +75,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "17.00",
     type: "tulpar",
     transport_code: 1517,
+    users: [0],
   },
   {
     id: 0,
@@ -81,6 +87,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "90.00",
     fullname: "Динара А.",
     phone: 702070705,
+    users: [0],
   },
   {
     id: 0,
@@ -92,6 +99,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "400.00",
     fullname: "Адилет М.",
     phone: 502822053,
+    users: [0],
   },
   {
     id: 0,
@@ -103,6 +111,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "100.00",
     fullname: "Рыспек Б.",
     phone: 550808813,
+    users: [0],
   },
   {
     id: 0,
@@ -114,6 +123,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "90.00",
     fullname: "Чолпон У.",
     phone: 704138168,
+    users: [0],
   },
   {
     id: 0,
@@ -125,6 +135,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "300.00",
     fullname: "Элзат Н.",
     phone: 508066091,
+    users: [0],
   },
   {
     id: 0,
@@ -136,6 +147,7 @@ export const paymentsData: ICustomPayment[] = [
     summ: "70.00",
     fullname: "Айазада Ж.",
     phone: 999591994,
+    users: [0],
   },
 ];
 
