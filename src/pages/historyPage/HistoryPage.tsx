@@ -7,7 +7,7 @@ import incomeIcon from "../../assets/images/icons/income.svg";
 import tulparIcon from "../../assets/images/icons/tulpar.svg";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
-import { isUumarkOpenAtom, paymentAtom } from "../../store/store";
+import { isClosedAtom, isUumarkOpenAtom, paymentAtom } from "../../store/store";
 import { useProfile } from "../../hooks/queries/useProfile";
 import { useDistributePayments } from "../../hooks/useDistributePayments";
 
@@ -15,6 +15,7 @@ const HistoryPage: FC = () => {
   const navigate = useNavigate();
   const [_, setPayment] = useAtom(paymentAtom);
   const [isUumarkOpen, setIsUumarkOpen] = useAtom(isUumarkOpenAtom);
+  const [isClosed] = useAtom(isClosedAtom);
 
   const { data: profile } = useProfile();
 
@@ -86,7 +87,11 @@ const HistoryPage: FC = () => {
                         }
                       )}
                     >
-                      {((pm.summ as unknown as string) + "").replace(/\./, ",")}{" "}
+                      {(
+                        (isClosed
+                          ? (pm.summ / (pm.users?.length || 1)).toFixed(2)
+                          : (pm.summ as unknown as string)) + ""
+                      ).replace(/\./, ",")}{" "}
                       <span className="underline text-[15px]">C</span>
                       {!pm.is_success && (
                         <>

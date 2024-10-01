@@ -3,6 +3,7 @@ import { formatNumber } from "../../constants/utils";
 import clsx from "clsx";
 import { useAtom } from "jotai";
 import {
+  isClosedAtom,
   isUumarkOpenAtom,
   paymentAtom,
   paymentStatusAtom,
@@ -27,6 +28,7 @@ const Uumark: FC = () => {
   const [isOpen, setIsOpen] = useAtom(isUumarkOpenAtom);
   const [payment, setPayment] = useAtom(paymentAtom);
   const [status, setStatus] = useAtom(paymentStatusAtom);
+  const [isClosed] = useAtom(isClosedAtom);
   const [statusClicks, setStatusClicks] = useState(0);
 
   const { mutate: toggleStatus, isPending } = useMutation({
@@ -42,11 +44,13 @@ const Uumark: FC = () => {
   });
 
   const onClickStatus = () => {
-    if (statusClicks >= 3) {
-      setStatusClicks(0);
-      toggleStatus({ id: payment.id, is_success: !payment.is_success });
-    } else {
-      setStatusClicks((prev) => prev + 1);
+    if (!isClosed) {
+      if (statusClicks >= 3) {
+        setStatusClicks(0);
+        toggleStatus({ id: payment.id, is_success: !payment.is_success });
+      } else {
+        setStatusClicks((prev) => prev + 1);
+      }
     }
   };
 
@@ -87,6 +91,9 @@ const Uumark: FC = () => {
     return `${integer},${formattedDecimal}`;
   }
 
+  const summ: number = isClosed
+    ? +(+payment.summ / (payment.users?.length || 1)).toFixed(2)
+    : +payment.summ;
 
   return (
     <div
@@ -136,9 +143,10 @@ const Uumark: FC = () => {
           -{" "}
           {payment.type === "o-dengi" ? (
             // @ts-ignore
-            formatNumber(formatNum(+payment.summ + (+payment.summ * 1) / 100))
+            formatNumber(formatNum(summ + (summ * 1) / 100))
           ) : (
-            <>{formatNumber(+payment.summ)},00 </>
+            // @ts-ignore
+            <>{formatNumber(formatNum(summ))} </>
           )}
           <span className="block underline text-[21px] ml-[6px] font-black">
             C
@@ -222,7 +230,6 @@ const Uumark: FC = () => {
           )}{" "}
           {payment.fullname !== "Global" && (
             <>
-              <br />
               Сумма <span className="summ">{formatNumber(+payment.summ)}</span>
               .00 KGS
             </>

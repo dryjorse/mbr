@@ -98,11 +98,17 @@ const MainPage: FC = () => {
   const expensesForCurrentMonth = formatNumber(
     profile?.payments.reduce(
       (prev, payment) =>
-        new Date(payment.created_at).getMonth() === new Date().getMonth()
-          ? prev + +payment.summ
-          : prev,
+        // new Date(payment.created_at).getMonth() === new Date().getMonth() &&
+         prev + +payment.summ / payment.users.length ,
       0
     ) || 0
+  );
+
+  console.log(
+    profile?.payments.reduce(
+      (prev, payment) => prev + +payment.summ / payment.users.length,
+      0
+    )
   );
 
   const expensesTypes = profile?.payments

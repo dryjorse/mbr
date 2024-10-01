@@ -40,6 +40,7 @@ const QrPage: FC = () => {
           fullname: `${capitalizeName(fullname.split(" ")[0])} ${
             fullname.split(" ")[1]
           }.`,
+          type: "transfer",
         });
       } else if (decodedText.match(/pay.payqr.kg/i)) {
         const fullname = decodeURIComponent(
@@ -52,6 +53,7 @@ const QrPage: FC = () => {
           fullname: `${capitalizeName(fullname.split(" ")[0])} ${
             fullname.split(" ")[1]
           }.`,
+          type: "transfer",
         });
       } else if (decodedText.match(/tulpar/i)) {
         setPayment({

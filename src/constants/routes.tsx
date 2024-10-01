@@ -1,4 +1,5 @@
 import AuthPage from "../pages/authPage/AuthPage";
+import ClosedPage from "../pages/closedPage/ClosedPage";
 import ConfirmTransfer from "../pages/confirmTransfer/ConfirmTransfer";
 import HistoryPage from "../pages/historyPage/HistoryPage";
 import MainPage from "../pages/mainPage/MainPage";
@@ -20,6 +21,7 @@ export const routes = [
   { path: "/transfer-by-phone2", element: <TransferByPhoneTwo /> },
   { path: "/confirm-transfer", element: <ConfirmTransfer /> },
   { path: "/payment", element: <PaymentPage /> },
+  { path: "/closed", element: <ClosedPage /> },
 ];
 
 export const pagesWithNavigation = ["", "payments", "services", "more"];

@@ -10,6 +10,7 @@ export interface IPayment {
   phone?: number;
   transport_code?: number;
   created_at: Date;
+  users: number[];
 }
 export interface IPaymentDate {
   date: string;

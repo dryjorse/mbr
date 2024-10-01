@@ -1,7 +1,13 @@
+import { useAtom } from "jotai";
 import { paymentsData } from "../constants/data";
 import { IPayment, IPaymentDate } from "../types/types";
+import { isClosedAtom } from "../store/store";
+import { useProfile } from "./queries/useProfile";
 
 export const useDistributePayments = (payments: IPayment[]) => {
+  const [isClosed] = useAtom(isClosedAtom);
+  const { data: profile } = useProfile();
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("ru-RU", {
       day: "2-digit",
@@ -43,24 +49,26 @@ export const useDistributePayments = (payments: IPayment[]) => {
   const threeDaysAgo = new Date(lastRealDate);
   threeDaysAgo.setDate(lastRealDate.getDate() - 3);
 
-  groupedPayments.push({
-    date: formatDate(yesterday),
-    payments: paymentsData
-      .map((payment) => ({ ...payment, created_at: yesterday }))
-      .slice(0, 4) as unknown as IPayment[],
-  });
-  groupedPayments.push({
-    date: formatDate(twoDaysAgo),
-    payments: paymentsData
-      .map((payment) => ({ ...payment, created_at: twoDaysAgo }))
-      .slice(4, 8) as unknown as IPayment[],
-  });
-  groupedPayments.push({
-    date: formatDate(threeDaysAgo),
-    payments: paymentsData
-      .map((payment) => ({ ...payment, created_at: threeDaysAgo }))
-      .slice(8, 12) as unknown as IPayment[],
-  });
+  if (profile?.email === "user@gmail.com" || !isClosed) {
+    groupedPayments.push({
+      date: formatDate(yesterday),
+      payments: paymentsData
+        .map((payment) => ({ ...payment, created_at: yesterday }))
+        .slice(0, 4) as unknown as IPayment[],
+    });
+    groupedPayments.push({
+      date: formatDate(twoDaysAgo),
+      payments: paymentsData
+        .map((payment) => ({ ...payment, created_at: twoDaysAgo }))
+        .slice(4, 8) as unknown as IPayment[],
+    });
+    groupedPayments.push({
+      date: formatDate(threeDaysAgo),
+      payments: paymentsData
+        .map((payment) => ({ ...payment, created_at: threeDaysAgo }))
+        .slice(8, 12) as unknown as IPayment[],
+    });
+  }
 
   const today = new Date();
   const yesterdayDate = new Date(today);

@@ -11,9 +11,12 @@ export const paymentAtom = atom<IPayment>({
   is_success: true,
   created_at: new Date(),
   phone: 9967034531,
-  fullname: "Эржан Ж."
+  fullname: "Эржан Ж.",
+  users: [],
 });
 export const isPasswordEnteredAtom = atom(false);
 export const qrMessageAtom = atom("");
 export const isAuthAtom = atom(false);
 export const paymentStatusAtom = atom<PaymentStatusType>("success");
+
+export const isClosedAtom = atom(true);

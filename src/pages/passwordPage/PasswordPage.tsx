@@ -4,16 +4,16 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
-import { isAuthAtom, isPasswordEnteredAtom } from "../../store/store";
+import { isPasswordEnteredAtom } from "../../store/store";
 import { useProfile } from "../../hooks/queries/useProfile";
-import Cookies from "js-cookie";
+import { useLogout } from "../../hooks/useLogout";
 
 const PasswordPage: FC = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [_, setIsPasswordEntered] = useAtom(isPasswordEnteredAtom);
-  const [__, setIsAuth] = useAtom(isAuthAtom);
   const { data: profile } = useProfile();
+  const logout = useLogout();
 
   useEffect(() => {
     let timeout: number;
@@ -38,12 +38,6 @@ const PasswordPage: FC = () => {
 
   const onClickDelete = () => {
     setPassword((prev) => prev.slice(0, -1));
-  };
-
-  const onClickExit = () => {
-    Cookies.remove("mbr-refresh-token");
-    localStorage.removeItem("mbr-access-token");
-    setIsAuth(false);
   };
 
   const variants = {
@@ -117,7 +111,7 @@ const PasswordPage: FC = () => {
             {key + 1}
           </button>
         ))}
-        <button onClick={onClickExit}>Выйти</button>
+        <button onClick={logout}>Выйти</button>
         <button
           onClick={() => onClickNumber(0)}
           className="rounded-circle bg-gray w-[80px] h-[80px] text-[24px] font-bold"
