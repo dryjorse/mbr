@@ -155,7 +155,7 @@ const Uumark: FC = () => {
         <h3 className="text-center text-grey text-[17px]">
           {payment.type === "tulpar"
             ? "Тулпар - оплата за проезд"
-            : payment.type === "o-dengi"
+            : (payment.type === "o-dengi" || payment.fullname === "Global")
             ? "Перевод по QR"
             : "Перевод по номеру телефона"}
         </h3>
