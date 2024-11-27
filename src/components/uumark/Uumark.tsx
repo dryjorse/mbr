@@ -156,7 +156,7 @@ const Uumark: FC = () => {
           {payment.type === "tulpar"
             ? "Тулпар - оплата за проезд"
             : (payment.type === "o-dengi" || payment.fullname === "Global")
-            ? "Перевод по QR"
+            ? "Оплата по QR"
             : "Перевод по номеру телефона"}
         </h3>
         <img src={borderIcon} alt="border" className="w-full my-10" />
