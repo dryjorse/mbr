@@ -176,7 +176,7 @@ const Uumark: FC = () => {
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Оплачено со счета</span>
-          <span>{profile?.account}</span>
+          <span>{profile?.account || "1030120546212789"}</span>
         </div>
         {payment.type === "o-dengi" && (
           <div className="my-[7px] flex justify-between text-[15px]">
