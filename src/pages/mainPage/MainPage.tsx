@@ -26,8 +26,6 @@ import countriesReclamImage from "../../assets/images/second-countries.png";
 import mtravelReclamImage from "../../assets/images/second-mtravel.png";
 import { IType } from "../../types/types";
 import clsx from "clsx";
-import { useAtom } from "jotai";
-import { isExtrAtom } from "../../store/store";
 
 const stories = [
   { image: qrStoryImage, alt: "qr-story" },
