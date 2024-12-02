@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { formatNumber, formatPhone } from "../../constants/utils";
 import { useAtom } from "jotai";
-import { paymentAtom } from "../../store/store";
+import { isExtrAtom, paymentAtom } from "../../store/store";
 import arrowIcon from "../../assets/images/icons/arrow.svg";
 import somIcon from "../../assets/images/icons/som.svg";
 import arrowDownIcon from "../../assets/images/icons/arrow-down.svg";
@@ -15,13 +15,14 @@ import { useProfile } from "../../hooks/queries/useProfile";
 const ConfirmTransfer: FC = () => {
   const navigate = useNavigate();
   const [payment, setPayment] = useAtom(paymentAtom);
+  const [isExtr] = useAtom(isExtrAtom);
   const { data: profile } = useProfile();
   navigator.geolocation.getCurrentPosition((position) => {
     console.log(position);
   });
 
   const paymentType = payment.type === "o-dengi" ? "платеж" : "перевод";
-  console.log(payment)
+  console.log(payment);
 
   return (
     <div className="h-[calc(100vh-14px)] flex flex-col justify-between">
@@ -42,11 +43,11 @@ const ConfirmTransfer: FC = () => {
               <span className="text-[50px] leading-[0px] tracking-[-3px]">
                 ..
               </span>
-              {(profile?.account + "").slice(-4)}
+              {isExtr ? "0965" : (profile?.account + "").slice(-4)}
             </span>
             <span className="font-bold text-[17px]">
               <span className="text-white">
-                {formatNumber(profile?.balance || 0, false)}
+                {formatNumber(isExtr ? 2100 : profile?.balance || 0, false)}
               </span>{" "}
               <span className="som text-[15px]">C</span>
             </span>

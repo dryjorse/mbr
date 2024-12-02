@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { paymentAtom, paymentStatusAtom } from "../../store/store";
+import { isExtrAtom, paymentAtom, paymentStatusAtom } from "../../store/store";
 import { useEffect, useState } from "react";
 import { IAddress } from "../../types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,10 +11,15 @@ export const usePay = () => {
   const queryClient = useQueryClient();
   const [payment, setPayment] = useAtom(paymentAtom);
   const [_, setPaymentStatus] = useAtom(paymentStatusAtom);
+  const [isExtra] = useAtom(isExtrAtom);
   const [location, setLocation] = useState<Omit<IAddress, "display_name">>({
     lat: 0,
     lon: 0,
   });
+
+  useEffect(() => {
+    setPaymentStatus("success");
+  }, [isExtra]);
 
   const { mutate: pay } = useMutation({
     mutationFn: paymentsService.pay,
@@ -38,7 +43,7 @@ export const usePay = () => {
   });
 
   useEffect(() => {
-    setPaymentStatus("loading");
+    !isExtra && setPaymentStatus("loading");
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {

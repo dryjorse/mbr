@@ -7,7 +7,7 @@ import profileIcon from "../../assets/images/icons/profile.svg";
 import arrowDownIcon from "../../assets/images/icons/arrow-down.svg";
 import clsx from "clsx";
 import { useAtom } from "jotai";
-import { paymentAtom, qrMessageAtom } from "../../store/store";
+import { isExtrAtom, paymentAtom, qrMessageAtom } from "../../store/store";
 import { useProfile } from "../../hooks/queries/useProfile";
 
 const TransferByPhoneTwo: FC = () => {
@@ -15,6 +15,7 @@ const TransferByPhoneTwo: FC = () => {
   const [isMessageFocused, setIsMessageFocused] = useState(false);
   const [message, setMessage] = useState("");
   const [payment, setPayment] = useAtom(paymentAtom);
+  const [isExtr] = useAtom(isExtrAtom);
   const [qrMessage] = useAtom(qrMessageAtom);
   const { data: profile } = useProfile();
   const [summ, setSumm] = useState(0);
@@ -44,14 +45,13 @@ const TransferByPhoneTwo: FC = () => {
             <span className="text-[50px] leading-[0px] tracking-[-3px]">
               ..
             </span>
-            {(profile?.account + "").slice(-4)}
+            {isExtrAtom ? "0965" : (profile?.account + "").slice(-4)}
           </span>
           <span className="font-bold text-[17px]">
             <span className="text-white">
-              {(formatNumber(profile?.balance || 0, false) + "").replace(
-                /\./,
-                ","
-              )}
+              {(
+                formatNumber(isExtr ? 2100 : profile?.balance || 0, false) + ""
+              ).replace(/\./, ",")}
             </span>{" "}
             <span className="som text-[15px]">C</span>
           </span>

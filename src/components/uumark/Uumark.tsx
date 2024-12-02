@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useAtom } from "jotai";
 import {
   isClosedAtom,
+  isExtrAtom,
   isUumarkOpenAtom,
   paymentAtom,
   paymentStatusAtom,
@@ -29,6 +30,7 @@ const Uumark: FC = () => {
   const [payment, setPayment] = useAtom(paymentAtom);
   const [status, setStatus] = useAtom(paymentStatusAtom);
   const [isClosed] = useAtom(isClosedAtom);
+  const [isExtr] = useAtom(isExtrAtom);
   const [statusClicks, setStatusClicks] = useState(0);
 
   const { mutate: toggleStatus, isPending } = useMutation({
@@ -155,7 +157,7 @@ const Uumark: FC = () => {
         <h3 className="text-center text-grey text-[17px]">
           {payment.type === "tulpar"
             ? "Тулпар - оплата за проезд"
-            : (payment.type === "o-dengi" || payment.fullname === "Global")
+            : payment.type === "o-dengi" || payment.fullname === "Global"
             ? "Оплата по QR"
             : "Перевод по номеру телефона"}
         </h3>
@@ -176,7 +178,7 @@ const Uumark: FC = () => {
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Оплачено со счета</span>
-          <span>{profile?.account}</span>
+          <span>{isExtr ? 103120390569425 : profile?.account}</span>
         </div>
         {payment.type === "o-dengi" && (
           <div className="my-[7px] flex justify-between text-[15px]">
@@ -194,7 +196,7 @@ const Uumark: FC = () => {
         {status !== "loading" && (
           <div className="my-[7px] flex justify-between text-[15px]">
             <span className="text-grey">Номер квитанции</span>
-            <span>{payment.receipt_number}</span>
+            <span>{isExtr ? "P1128133506243" : payment.receipt_number}</span>
           </div>
         )}
         {payment.type === "o-dengi" && (

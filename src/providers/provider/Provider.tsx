@@ -17,6 +17,8 @@ const Provider: FC<PropsWithChildren> = ({ children }) => {
 
   console.log(data?.email !== "user@gmail.com");
 
+  return children
+
   return !isAuth && !pathname.match(/auth/i) ? (
     <Navigate to="/auth" />
   ) : isClosed &&

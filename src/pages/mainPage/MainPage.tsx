@@ -26,6 +26,8 @@ import countriesReclamImage from "../../assets/images/second-countries.png";
 import mtravelReclamImage from "../../assets/images/second-mtravel.png";
 import { IType } from "../../types/types";
 import clsx from "clsx";
+import { useAtom } from "jotai";
+import { isExtrAtom } from "../../store/store";
 
 const stories = [
   { image: qrStoryImage, alt: "qr-story" },
@@ -78,6 +80,7 @@ const MainPage: FC = () => {
   const iconControls = useAnimation();
   const { scrollY } = useScroll();
   const { data: profile } = useProfile();
+  const [isExtr] = useAtom(isExtrAtom);
 
   useEffect(() => {
     const updateFontSize = () => {
@@ -99,7 +102,7 @@ const MainPage: FC = () => {
     profile?.payments.reduce(
       (prev, payment) =>
         // new Date(payment.created_at).getMonth() === new Date().getMonth() &&
-         prev + +payment.summ / payment.users.length ,
+        prev + +payment.summ / payment.users.length,
       0
     ) || 0
   );
