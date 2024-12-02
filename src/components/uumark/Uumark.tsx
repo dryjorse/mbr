@@ -36,11 +36,11 @@ const Uumark: FC = () => {
   const { mutate: toggleStatus, isPending } = useMutation({
     mutationFn: paymentsService.toggleStatus,
     onMutate: () => {
-      setStatus("loading");
+      !isExtra && setStatus("loading");
     },
     onSuccess: ({ data }) => {
       setPayment(data);
-      setStatus(data.is_success ? "success" : "error");
+      setStatus(isExtra ? "success" : data.is_success ? "success" : "error");
       queryClient.prefetchQuery({ queryKey: [queryKeys.Profile] });
     },
   });
@@ -49,7 +49,11 @@ const Uumark: FC = () => {
     if (!isClosed) {
       if (statusClicks >= 3) {
         setStatusClicks(0);
-        toggleStatus({ id: payment.id, is_success: !payment.is_success });
+        if (isExtra) {
+          setStatus("error");
+        } else {
+          toggleStatus({ id: payment.id, is_success: !payment.is_success });
+        }
       } else {
         setStatusClicks((prev) => prev + 1);
       }
