@@ -30,7 +30,7 @@ export const usePay = () => {
       queryClient.prefetchQuery({ queryKey: [queryKeys.Profile] });
     },
     onError: () => {
-      setPaymentStatus("error");
+      !isExtra && setPaymentStatus("error");
       setPayment({ ...payment, is_success: false });
     },
   });

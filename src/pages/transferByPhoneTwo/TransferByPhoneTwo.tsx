@@ -196,7 +196,13 @@ const TransferByPhoneTwo: FC = () => {
       )}
       <Link
         onClick={onConfirm}
-        to={isEnoughMoney ? "/confirm-transfer" : "/transfer-by-phone2"}
+        to={
+          isEnoughMoney
+            ? "/confirm-transfer"
+            : isExtr
+            ? "/confirm-transfer"
+            : "/transfer-by-phone2"
+        }
         className={clsx("btn", {
           "!bg-[#6B6C70] !text-white pointer-events-none": !summ,
         })}
