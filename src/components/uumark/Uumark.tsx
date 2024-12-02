@@ -124,7 +124,9 @@ const Uumark: FC = () => {
           <img
             alt="mark"
             src={
-              status === "loading"
+              isExtra
+                ? markIcon
+                : status === "loading"
                 ? clockIcon
                 : payment.is_success
                 ? markIcon
@@ -135,11 +137,13 @@ const Uumark: FC = () => {
         </button>
         <h1
           className={clsx("text-[21px] text-center text-green", {
-            "!text-orange": status === "loading",
-            "!text-red": !payment.is_success,
+            "!text-orange": status === "loading" && !isExtra,
+            "!text-red": !payment.is_success && !isExtra,
           })}
         >
-          {status === "loading"
+          {isExtra
+            ? "Транзакция успешно проведена"
+            : status === "loading"
             ? "Платеж в обработке"
             : payment.is_success
             ? "Транзакция успешно проведена"
