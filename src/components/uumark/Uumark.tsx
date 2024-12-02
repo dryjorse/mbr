@@ -24,13 +24,13 @@ import errorIcon from "../../assets/images/icons/error.svg";
 import { queryKeys } from "../../constants/api";
 
 const Uumark: FC = () => {
+  const [isExtra] = useAtom(isExtrAtom);
   const queryClient = useQueryClient();
   const { data: profile } = useProfile();
   const [isOpen, setIsOpen] = useAtom(isUumarkOpenAtom);
   const [payment, setPayment] = useAtom(paymentAtom);
   const [status, setStatus] = useAtom(paymentStatusAtom);
   const [isClosed] = useAtom(isClosedAtom);
-  const [isExtr] = useAtom(isExtrAtom);
   const [statusClicks, setStatusClicks] = useState(0);
 
   const { mutate: toggleStatus, isPending } = useMutation({
@@ -178,7 +178,7 @@ const Uumark: FC = () => {
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Оплачено со счета</span>
-          <span>{isExtr ? 103120390569425 : profile?.account}</span>
+          <span>{isExtra ? profile?.account : "1030120546212794"}</span>
         </div>
         {payment.type === "o-dengi" && (
           <div className="my-[7px] flex justify-between text-[15px]">
@@ -196,7 +196,9 @@ const Uumark: FC = () => {
         {status !== "loading" && (
           <div className="my-[7px] flex justify-between text-[15px]">
             <span className="text-grey">Номер квитанции</span>
-            <span>{isExtr ? "P1128133506243" : payment.receipt_number}</span>
+            <span>
+              {isExtrAtom ? "P1128133506237" : payment.receipt_number}
+            </span>
           </div>
         )}
         {payment.type === "o-dengi" && (
