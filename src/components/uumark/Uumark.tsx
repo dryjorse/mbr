@@ -178,7 +178,7 @@ const Uumark: FC = () => {
         </div>
         <div className="my-[7px] flex justify-between text-[15px]">
           <span className="text-grey">Оплачено со счета</span>
-          <span>{isExtra ? profile?.account : "1030120546212794"}</span>
+          <span>{isExtra ? "1030120546212794" : profile?.account}</span>
         </div>
         {payment.type === "o-dengi" && (
           <div className="my-[7px] flex justify-between text-[15px]">
@@ -196,9 +196,7 @@ const Uumark: FC = () => {
         {status !== "loading" && (
           <div className="my-[7px] flex justify-between text-[15px]">
             <span className="text-grey">Номер квитанции</span>
-            <span>
-              {isExtrAtom ? "P1128133506237" : payment.receipt_number}
-            </span>
+            <span>{isExtra ? "P1128133506237" : payment.receipt_number}</span>
           </div>
         )}
         {payment.type === "o-dengi" && (

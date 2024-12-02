@@ -80,7 +80,6 @@ const MainPage: FC = () => {
   const iconControls = useAnimation();
   const { scrollY } = useScroll();
   const { data: profile } = useProfile();
-  const [isExtr] = useAtom(isExtrAtom);
 
   useEffect(() => {
     const updateFontSize = () => {
