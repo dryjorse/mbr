@@ -19,5 +19,5 @@ export const qrMessageAtom = atom("");
 export const isAuthAtom = atom(false);
 export const paymentStatusAtom = atom<PaymentStatusType>("success");
 
-export const isClosedAtom = atom(true);
+export const isClosedAtom = atom(false);
 export const isExtrAtom = atom(true);
